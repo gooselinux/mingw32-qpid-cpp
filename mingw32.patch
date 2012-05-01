@@ -1,0 +1,2778 @@
+diff --git a/qpid/cpp/include/qmf/Agent.h b/qpid/cpp/include/qmf/Agent.h
+index 8c0f48b..94083be 100644
+--- a/qpid/cpp/include/qmf/Agent.h
++++ b/qpid/cpp/include/qmf/Agent.h
+@@ -42,7 +42,7 @@ namespace qmf {
+     class SchemaId;
+     class Schema;
+ 
+-    class Agent : public qmf::Handle<AgentImpl> {
++    class QMF_CLASS_EXTERN Agent : public qmf::Handle<AgentImpl> {
+     public:
+         QMF_EXTERN Agent(AgentImpl* impl = 0);
+         QMF_EXTERN Agent(const Agent&);
+diff --git a/qpid/cpp/include/qmf/AgentEvent.h b/qpid/cpp/include/qmf/AgentEvent.h
+index 59a41c3..0f93a9b 100644
+--- a/qpid/cpp/include/qmf/AgentEvent.h
++++ b/qpid/cpp/include/qmf/AgentEvent.h
+@@ -46,7 +46,7 @@ namespace qmf {
+     AGENT_THREAD_FAILED   = 8
+     };
+ 
+-    class AgentEvent : public qmf::Handle<AgentEventImpl> {
++    class QMF_CLASS_EXTERN AgentEvent : public qmf::Handle<AgentEventImpl> {
+     public:
+         QMF_EXTERN AgentEvent(AgentEventImpl* impl = 0);
+         QMF_EXTERN AgentEvent(const AgentEvent&);
+diff --git a/qpid/cpp/include/qmf/AgentSession.h b/qpid/cpp/include/qmf/AgentSession.h
+index 39d921a..1eeb252 100644
+--- a/qpid/cpp/include/qmf/AgentSession.h
++++ b/qpid/cpp/include/qmf/AgentSession.h
+@@ -40,7 +40,7 @@ namespace qmf {
+     class Data;
+     class DataAddr;
+ 
+-    class AgentSession : public qmf::Handle<AgentSessionImpl> {
++    class QMF_CLASS_EXTERN AgentSession : public qmf::Handle<AgentSessionImpl> {
+     public:
+         QMF_EXTERN AgentSession(AgentSessionImpl* impl = 0);
+         QMF_EXTERN AgentSession(const AgentSession&);
+diff --git a/qpid/cpp/include/qmf/ConsoleEvent.h b/qpid/cpp/include/qmf/ConsoleEvent.h
+index b836b62..94600f9 100644
+--- a/qpid/cpp/include/qmf/ConsoleEvent.h
++++ b/qpid/cpp/include/qmf/ConsoleEvent.h
+@@ -57,7 +57,7 @@ namespace qmf {
+     AGENT_DEL_FILTER = 2 
+     };
+ 
+-    class ConsoleEvent : public qmf::Handle<ConsoleEventImpl> {
++    class QMF_CLASS_EXTERN ConsoleEvent : public qmf::Handle<ConsoleEventImpl> {
+     public:
+         QMF_EXTERN ConsoleEvent(ConsoleEventImpl* impl = 0);
+         QMF_EXTERN ConsoleEvent(const ConsoleEvent&);
+diff --git a/qpid/cpp/include/qmf/ConsoleSession.h b/qpid/cpp/include/qmf/ConsoleSession.h
+index 896f8ff..6008036 100644
+--- a/qpid/cpp/include/qmf/ConsoleSession.h
++++ b/qpid/cpp/include/qmf/ConsoleSession.h
+@@ -38,7 +38,7 @@ namespace qmf {
+     class ConsoleSessionImpl;
+     class ConsoleEvent;
+ 
+-    class ConsoleSession : public qmf::Handle<ConsoleSessionImpl> {
++    class QMF_CLASS_EXTERN ConsoleSession : public qmf::Handle<ConsoleSessionImpl> {
+     public:
+         QMF_EXTERN ConsoleSession(ConsoleSessionImpl* impl = 0);
+         QMF_EXTERN ConsoleSession(const ConsoleSession&);
+diff --git a/qpid/cpp/include/qmf/Data.h b/qpid/cpp/include/qmf/Data.h
+index 82f1569..487a02f 100644
+--- a/qpid/cpp/include/qmf/Data.h
++++ b/qpid/cpp/include/qmf/Data.h
+@@ -39,7 +39,7 @@ namespace qmf {
+     class DataAddr;
+     class Agent;
+ 
+-    class Data : public qmf::Handle<DataImpl> {
++    class QMF_CLASS_EXTERN Data : public qmf::Handle<DataImpl> {
+     public:
+         QMF_EXTERN Data(DataImpl* impl = 0);
+         QMF_EXTERN Data(const Data&);
+diff --git a/qpid/cpp/include/qmf/DataAddr.h b/qpid/cpp/include/qmf/DataAddr.h
+index 72de0c9..63d309c 100644
+--- a/qpid/cpp/include/qmf/DataAddr.h
++++ b/qpid/cpp/include/qmf/DataAddr.h
+@@ -34,7 +34,7 @@ namespace qmf {
+ 
+     class DataAddrImpl;
+ 
+-    class DataAddr : public qmf::Handle<DataAddrImpl> {
++    class QMF_CLASS_EXTERN DataAddr : public qmf::Handle<DataAddrImpl> {
+     public:
+         QMF_EXTERN DataAddr(DataAddrImpl* impl = 0);
+         QMF_EXTERN DataAddr(const DataAddr&);
+diff --git a/qpid/cpp/include/qmf/Handle.h b/qpid/cpp/include/qmf/Handle.h
+index 510e299..50971ea 100644
+--- a/qpid/cpp/include/qmf/Handle.h
++++ b/qpid/cpp/include/qmf/Handle.h
+@@ -39,22 +39,22 @@ template <class T> class Handle {
+   public:
+ 
+     /**@return true if handle is valid,  i.e. not null. */
+-    QMF_EXTERN bool isValid() const { return impl; }
++    QMF_INLINE_EXTERN bool isValid() const { return impl; }
+ 
+     /**@return true if handle is null. It is an error to call any function on a null handle. */
+-    QMF_EXTERN bool isNull() const { return !impl; }
++    QMF_INLINE_EXTERN bool isNull() const { return !impl; }
+ 
+     /** Conversion to bool supports idiom if (handle) { handle->... } */
+-    QMF_EXTERN operator bool() const { return impl; }
++    QMF_INLINE_EXTERN operator bool() const { return impl; }
+ 
+     /** Operator ! supports idiom if (!handle) { do_if_handle_is_null(); } */
+-    QMF_EXTERN bool operator !() const { return !impl; }
++    QMF_INLINE_EXTERN bool operator !() const { return !impl; }
+ 
+     void swap(Handle<T>& h) { T* t = h.impl; h.impl = impl; impl = t; }
+ 
+   protected:
+     typedef T Impl;
+-    QMF_EXTERN Handle() :impl() {}
++    QMF_INLINE_EXTERN Handle() :impl() {}
+ 
+     // Not implemented,subclasses must implement.
+     QMF_EXTERN Handle(const Handle&);
+diff --git a/qpid/cpp/include/qmf/ImportExport.h b/qpid/cpp/include/qmf/ImportExport.h
+index f5e1d91..1f7a6d1 100644
+--- a/qpid/cpp/include/qmf/ImportExport.h
++++ b/qpid/cpp/include/qmf/ImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#  if defined(QMF_EXPORT) || defined (qmfcommon_EXPORTS)
++#  if defined(QMF_EXPORT) || defined (qmf2_EXPORTS)
+ #    define QMF_EXTERN __declspec(dllexport)
+ #  else
+ #    define QMF_EXTERN __declspec(dllimport)
+ #  endif
++#  ifdef _MSC_VER
++#    define QMF_CLASS_EXTERN
++#    define QMF_INLINE_EXTERN QMF_EXTERN
++#  else
++#    define QMF_CLASS_EXTERN QMF_EXTERN
++#    define QMF_INLINE_EXTERN
++#  endif
+ #else
+ #  define QMF_EXTERN
++#  define QMF_CLASS_EXTERN
++#  define QMF_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qmf/Query.h b/qpid/cpp/include/qmf/Query.h
+index fec4660..c292e46 100644
+--- a/qpid/cpp/include/qmf/Query.h
++++ b/qpid/cpp/include/qmf/Query.h
+@@ -43,7 +43,7 @@ namespace qmf {
+     QUERY_SCHEMA_ID = 4
+     };
+ 
+-    class Query : public qmf::Handle<QueryImpl> {
++    class QMF_CLASS_EXTERN Query : public qmf::Handle<QueryImpl> {
+     public:
+         QMF_EXTERN Query(QueryImpl* impl = 0);
+         QMF_EXTERN Query(const Query&);
+diff --git a/qpid/cpp/include/qmf/Schema.h b/qpid/cpp/include/qmf/Schema.h
+index cf31613..6cfd2e2 100644
+--- a/qpid/cpp/include/qmf/Schema.h
++++ b/qpid/cpp/include/qmf/Schema.h
+@@ -38,7 +38,7 @@ namespace qmf {
+     class SchemaProperty;
+     class SchemaMethod;
+ 
+-    class Schema : public qmf::Handle<SchemaImpl> {
++    class QMF_CLASS_EXTERN Schema : public qmf::Handle<SchemaImpl> {
+     public:
+         QMF_EXTERN Schema(SchemaImpl* impl = 0);
+         QMF_EXTERN Schema(const Schema&);
+diff --git a/qpid/cpp/include/qmf/SchemaId.h b/qpid/cpp/include/qmf/SchemaId.h
+index 13fb1cb..2dafc1c 100644
+--- a/qpid/cpp/include/qmf/SchemaId.h
++++ b/qpid/cpp/include/qmf/SchemaId.h
+@@ -35,7 +35,7 @@ namespace qmf {
+ 
+     class SchemaIdImpl;
+ 
+-    class SchemaId : public qmf::Handle<SchemaIdImpl> {
++    class QMF_CLASS_EXTERN SchemaId : public qmf::Handle<SchemaIdImpl> {
+     public:
+         QMF_EXTERN SchemaId(SchemaIdImpl* impl = 0);
+         QMF_EXTERN SchemaId(const SchemaId&);
+diff --git a/qpid/cpp/include/qmf/SchemaMethod.h b/qpid/cpp/include/qmf/SchemaMethod.h
+index 47302b6..b5944dc 100644
+--- a/qpid/cpp/include/qmf/SchemaMethod.h
++++ b/qpid/cpp/include/qmf/SchemaMethod.h
+@@ -36,7 +36,7 @@ namespace qmf {
+     class SchemaMethodImpl;
+     class SchemaProperty;
+ 
+-    class SchemaMethod : public qmf::Handle<SchemaMethodImpl> {
++    class QMF_CLASS_EXTERN SchemaMethod : public qmf::Handle<SchemaMethodImpl> {
+     public:
+         QMF_EXTERN SchemaMethod(SchemaMethodImpl* impl = 0);
+         QMF_EXTERN SchemaMethod(const SchemaMethod&);
+diff --git a/qpid/cpp/include/qmf/SchemaProperty.h b/qpid/cpp/include/qmf/SchemaProperty.h
+index a3a328b..bbb603f 100644
+--- a/qpid/cpp/include/qmf/SchemaProperty.h
++++ b/qpid/cpp/include/qmf/SchemaProperty.h
+@@ -36,7 +36,7 @@ namespace qmf {
+ 
+     class SchemaPropertyImpl;
+ 
+-    class SchemaProperty : public Handle<SchemaPropertyImpl> {
++    class QMF_CLASS_EXTERN SchemaProperty : public Handle<SchemaPropertyImpl> {
+     public:
+         QMF_EXTERN SchemaProperty(SchemaPropertyImpl* impl = 0);
+         QMF_EXTERN SchemaProperty(const SchemaProperty&);
+diff --git a/qpid/cpp/include/qmf/Subscription.h b/qpid/cpp/include/qmf/Subscription.h
+index 4e60eb9..30bf2ed 100644
+--- a/qpid/cpp/include/qmf/Subscription.h
++++ b/qpid/cpp/include/qmf/Subscription.h
+@@ -35,7 +35,7 @@ namespace qmf {
+     class SubscriptionImpl;
+     class Data;
+ 
+-    class Subscription : public qmf::Handle<SubscriptionImpl> {
++    class QMF_CLASS_EXTERN Subscription : public qmf::Handle<SubscriptionImpl> {
+     public:
+         QMF_EXTERN Subscription(SubscriptionImpl* impl = 0);
+         QMF_EXTERN Subscription(const Subscription&);
+diff --git a/qpid/cpp/include/qmf/engine/QmfEngineImportExport.h b/qpid/cpp/include/qmf/engine/QmfEngineImportExport.h
+index 373617e..cf8fffd 100644
+--- a/qpid/cpp/include/qmf/engine/QmfEngineImportExport.h
++++ b/qpid/cpp/include/qmf/engine/QmfEngineImportExport.h
+@@ -26,8 +26,17 @@
+ #  else
+ #    define QMFE_EXTERN __declspec(dllimport)
+ #  endif
++#  ifdef _MSC_VER
++#    define QMFE_CLASS_EXTERN
++#    define QMFE_INLINE_EXTERN QMFE_EXTERN
++#  else
++#    define QMFE_CLASS_EXTERN QMFE_EXTERN
++#    define QMFE_INLINE_EXTERN
++#  endif
+ #else
+ #  define QMFE_EXTERN
++#  define QMFE_CLASS_EXTERN
++#  define QMFE_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qmf/exceptions.h b/qpid/cpp/include/qmf/exceptions.h
+index 7959499..c7ffa68 100644
+--- a/qpid/cpp/include/qmf/exceptions.h
++++ b/qpid/cpp/include/qmf/exceptions.h
+@@ -31,24 +31,24 @@ namespace qmf {
+ /** \ingroup qmf
+  */
+ 
+-    struct QmfException : public qpid::types::Exception {
++    struct QMF_CLASS_EXTERN QmfException : public qpid::types::Exception {
+         QMF_EXTERN QmfException(const std::string& msg);
+         QMF_EXTERN virtual ~QmfException() throw();
+ 
+         qpid::types::Variant::Map detail;
+     };
+ 
+-    struct KeyNotFound : public QmfException {
++    struct QMF_CLASS_EXTERN KeyNotFound : public QmfException {
+         QMF_EXTERN KeyNotFound(const std::string& msg);
+         QMF_EXTERN virtual ~KeyNotFound() throw();
+     };
+ 
+-    struct IndexOutOfRange : public QmfException {
++    struct QMF_CLASS_EXTERN IndexOutOfRange : public QmfException {
+         QMF_EXTERN IndexOutOfRange();
+         QMF_EXTERN virtual ~IndexOutOfRange() throw();
+     };
+ 
+-    struct OperationTimedOut : public QmfException {
++    struct QMF_CLASS_EXTERN OperationTimedOut : public QmfException {
+         QMF_EXTERN OperationTimedOut();
+         QMF_EXTERN virtual ~OperationTimedOut() throw();
+     };
+diff --git a/qpid/cpp/include/qpid/Address.h b/qpid/cpp/include/qpid/Address.h
+index 57c9139..f5b19d0 100755
+--- a/qpid/cpp/include/qpid/Address.h
++++ b/qpid/cpp/include/qpid/Address.h
+@@ -36,7 +36,7 @@ public:
+     static const std::string TCP; // Default TCP protocol tag.
+     static const uint16_t AMQP_PORT=5672; // Default AMQP port.
+     
+-    QPID_COMMON_EXTERN explicit Address(
++    QPID_COMMON_INLINE_EXTERN explicit Address(
+         const std::string& protocol_=std::string(),
+         const std::string& host_=std::string(),
+         uint16_t port_=0
+diff --git a/qpid/cpp/include/qpid/CommonImportExport.h b/qpid/cpp/include/qpid/CommonImportExport.h
+index 02c06ed..c405e88 100644
+--- a/qpid/cpp/include/qpid/CommonImportExport.h
++++ b/qpid/cpp/include/qpid/CommonImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined(COMMON_EXPORT) || defined (qpidcommon_EXPORTS)
+-#define QPID_COMMON_EXTERN __declspec(dllexport)
++#  if defined(COMMON_EXPORT) || defined (qpidcommon_EXPORTS)
++#    define QPID_COMMON_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_COMMON_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_COMMON_CLASS_EXTERN
++#    define QPID_COMMON_INLINE_EXTERN QPID_COMMON_EXTERN
++#  else
++#    define QPID_COMMON_CLASS_EXTERN QPID_COMMON_EXTERN
++#    define QPID_COMMON_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_COMMON_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_COMMON_EXTERN
++#  define QPID_COMMON_EXTERN
++#  define QPID_COMMON_CLASS_EXTERN
++#  define QPID_COMMON_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qpid/Exception.h b/qpid/cpp/include/qpid/Exception.h
+index fa71111..cbd1752 100644
+--- a/qpid/cpp/include/qpid/Exception.h
++++ b/qpid/cpp/include/qpid/Exception.h
+@@ -36,7 +36,7 @@ namespace qpid
+ /**
+  * Base class for Qpid runtime exceptions.
+  */
+-class Exception : public std::exception
++class QPID_COMMON_CLASS_EXTERN Exception : public std::exception
+ {
+   public:
+     QPID_COMMON_EXTERN explicit Exception(const std::string& message=std::string()) throw();
+@@ -51,30 +51,30 @@ class Exception : public std::exception
+ };
+ 
+ /** Exception that includes an errno message. */
+-struct ErrnoException : public Exception {
++struct QPID_COMMON_CLASS_EXTERN ErrnoException : public Exception {
+     ErrnoException(const std::string& msg, int err) : Exception(msg+": "+qpid::sys::strError(err)) {}
+     ErrnoException(const std::string& msg) : Exception(msg+": "+qpid::sys::strError(errno)) {}
+ };
+ 
+-struct SessionException : public Exception {
++struct QPID_COMMON_CLASS_EXTERN SessionException : public Exception {
+     const framing::execution::ErrorCode code;
+     SessionException(framing::execution::ErrorCode code_, const std::string& message)
+         : Exception(message), code(code_) {}
+ };
+ 
+-struct ChannelException : public Exception {
++struct QPID_COMMON_CLASS_EXTERN ChannelException : public Exception {
+     const framing::session::DetachCode code;
+     ChannelException(framing::session::DetachCode _code, const std::string& message)
+         : Exception(message), code(_code) {}
+ };
+ 
+-struct ConnectionException : public Exception {
++struct QPID_COMMON_CLASS_EXTERN ConnectionException : public Exception {
+     const framing::connection::CloseCode code;
+     ConnectionException(framing::connection::CloseCode _code, const std::string& message)
+         : Exception(message), code(_code) {}
+ };
+ 
+-struct ClosedException : public Exception {
++struct QPID_COMMON_CLASS_EXTERN ClosedException : public Exception {
+     QPID_COMMON_EXTERN ClosedException(const std::string& msg=std::string());
+     QPID_COMMON_EXTERN std::string getPrefix() const;
+ };
+diff --git a/qpid/cpp/include/qpid/Url.h b/qpid/cpp/include/qpid/Url.h
+index 353e9d5..915b08a 100644
+--- a/qpid/cpp/include/qpid/Url.h
++++ b/qpid/cpp/include/qpid/Url.h
+@@ -66,7 +66,7 @@ struct Url : public std::vector<Address> {
+      *@exception Invalid if the url is invalid.
+      */
+     QPID_COMMON_EXTERN void parse(const char* url);
+-    QPID_COMMON_EXTERN void parse(const std::string& url) { parse(url.c_str()); }
++    QPID_COMMON_INLINE_EXTERN void parse(const std::string& url) { parse(url.c_str()); }
+ 
+     /** Replace contesnts with parsed URL. Replace with empty URL if invalid. */
+     QPID_COMMON_EXTERN void parseNoThrow(const char* url);
+diff --git a/qpid/cpp/include/qpid/agent/QmfAgentImportExport.h b/qpid/cpp/include/qpid/agent/QmfAgentImportExport.h
+index e41425a..3231925 100644
+--- a/qpid/cpp/include/qpid/agent/QmfAgentImportExport.h
++++ b/qpid/cpp/include/qpid/agent/QmfAgentImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined (qmf_EXPORTS)
+-#define QMF_AGENT_EXTERN __declspec(dllexport)
++#  if defined(QMF_EXPORT) || defined (qmf_EXPORTS)
++#    define QMF_AGENT_EXTERN __declspec(dllexport)
++#  else
++#    define QMF_AGENT_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QMF_AGENT_CLASS_EXTERN
++#    define QMF_AGENT_INLINE_EXTERN QMF_AGENT_EXTERN
++#  else
++#    define QMF_AGENT_CLASS_EXTERN QMF_AGENT_EXTERN
++#    define QMF_AGENT_INLINE_EXTERN
++#  endif
+ #else
+-#define QMF_AGENT_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QMF_AGENT_EXTERN
++#  define QMF_AGENT_EXTERN
++#  define QMF_AGENT_CLASS_EXTERN
++#  define QMF_AGENT_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qpid/client/ClientImportExport.h b/qpid/cpp/include/qpid/client/ClientImportExport.h
+index 42b02e3..683be3f 100644
+--- a/qpid/cpp/include/qpid/client/ClientImportExport.h
++++ b/qpid/cpp/include/qpid/client/ClientImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined(CLIENT_EXPORT) || defined (qpidclient_EXPORTS)
+-#define QPID_CLIENT_EXTERN __declspec(dllexport)
++#  if defined(CLIENT_EXPORT) || defined (qpidclient_EXPORTS)
++#    define QPID_CLIENT_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_CLIENT_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_CLIENT_CLASS_EXTERN
++#    define QPID_CLIENT_INLINE_EXTERN QPID_CLIENT_EXTERN
++#  else
++#    define QPID_CLIENT_CLASS_EXTERN QPID_CLIENT_EXTERN
++#    define QPID_CLIENT_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_CLIENT_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_CLIENT_EXTERN
++#  define QPID_CLIENT_EXTERN
++#  define QPID_CLIENT_CLASS_EXTERN
++#  define QPID_CLIENT_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qpid/client/Completion.h b/qpid/cpp/include/qpid/client/Completion.h
+index 99d940f..9546db9 100644
+--- a/qpid/cpp/include/qpid/client/Completion.h
++++ b/qpid/cpp/include/qpid/client/Completion.h
+@@ -41,7 +41,7 @@ template <class T> class PrivateImplRef;
+  *
+  *\ingroup clientapi
+  */
+-class Completion : public Handle<CompletionImpl>
++class QPID_CLIENT_CLASS_EXTERN Completion : public Handle<CompletionImpl>
+ {
+ public:
+     QPID_CLIENT_EXTERN Completion(CompletionImpl* = 0);
+diff --git a/qpid/cpp/include/qpid/client/Connection.h b/qpid/cpp/include/qpid/client/Connection.h
+index 6ed0d98..2477bf4 100644
+--- a/qpid/cpp/include/qpid/client/Connection.h
++++ b/qpid/cpp/include/qpid/client/Connection.h
+@@ -60,7 +60,7 @@ class ConnectionImpl;
+  *  
+  */
+ 
+-class Connection
++class QPID_CLIENT_CLASS_EXTERN Connection
+ {
+     framing::ProtocolVersion version;
+ 
+diff --git a/qpid/cpp/include/qpid/client/ConnectionSettings.h b/qpid/cpp/include/qpid/client/ConnectionSettings.h
+index 1c2ee28..2b6b86f 100644
+--- a/qpid/cpp/include/qpid/client/ConnectionSettings.h
++++ b/qpid/cpp/include/qpid/client/ConnectionSettings.h
+@@ -37,7 +37,7 @@ namespace client {
+ /**
+  * Settings for a Connection.
+  */
+-struct ConnectionSettings {
++struct QPID_CLIENT_CLASS_EXTERN ConnectionSettings {
+ 
+     QPID_CLIENT_EXTERN ConnectionSettings();
+     QPID_CLIENT_EXTERN virtual ~ConnectionSettings();
+diff --git a/qpid/cpp/include/qpid/client/FailoverListener.h b/qpid/cpp/include/qpid/client/FailoverListener.h
+index 59108eb..53c7c26 100644
+--- a/qpid/cpp/include/qpid/client/FailoverListener.h
++++ b/qpid/cpp/include/qpid/client/FailoverListener.h
+@@ -48,7 +48,7 @@ namespace client {
+  * FailoverListener::decode to extract a list of broker URLs from a
+  * failover exchange message.
+  */
+-class FailoverListener : private MessageListener, private qpid::sys::Runnable 
++class QPID_CLIENT_CLASS_EXTERN FailoverListener : private MessageListener, private qpid::sys::Runnable 
+ {
+   public:
+     /** The name of the standard failover exchange amq.failover */
+diff --git a/qpid/cpp/include/qpid/client/FailoverManager.h b/qpid/cpp/include/qpid/client/FailoverManager.h
+index 0d30e2e..d3a0dbc 100644
+--- a/qpid/cpp/include/qpid/client/FailoverManager.h
++++ b/qpid/cpp/include/qpid/client/FailoverManager.h
+@@ -42,7 +42,7 @@ struct CannotConnectException : qpid::Exception
+ /**
+  * Utility to manage failover.
+  */
+-class FailoverManager
++class QPID_CLIENT_CLASS_EXTERN FailoverManager
+ {
+   public:
+     /**
+diff --git a/qpid/cpp/include/qpid/client/Future.h b/qpid/cpp/include/qpid/client/Future.h
+index 09088e6..630a7e0 100644
+--- a/qpid/cpp/include/qpid/client/Future.h
++++ b/qpid/cpp/include/qpid/client/Future.h
+@@ -34,7 +34,7 @@ namespace qpid {
+ namespace client {
+ 
+ /**@internal */
+-class Future
++class QPID_CLIENT_CLASS_EXTERN Future
+ {
+     framing::SequenceNumber command;
+     boost::shared_ptr<FutureResult> result;
+diff --git a/qpid/cpp/include/qpid/client/FutureResult.h b/qpid/cpp/include/qpid/client/FutureResult.h
+index b2b663d..ead4929 100644
+--- a/qpid/cpp/include/qpid/client/FutureResult.h
++++ b/qpid/cpp/include/qpid/client/FutureResult.h
+@@ -34,7 +34,7 @@ namespace client {
+ class SessionImpl;
+ 
+ ///@internal
+-class FutureResult : public FutureCompletion
++class QPID_CLIENT_CLASS_EXTERN FutureResult : public FutureCompletion
+ {
+     std::string result;
+ public:
+diff --git a/qpid/cpp/include/qpid/client/Handle.h b/qpid/cpp/include/qpid/client/Handle.h
+index 088e836..b831548 100644
+--- a/qpid/cpp/include/qpid/client/Handle.h
++++ b/qpid/cpp/include/qpid/client/Handle.h
+@@ -40,22 +40,22 @@ template <class T> class Handle {
+   public:
+ 
+     /**@return true if handle is valid,  i.e. not null. */
+-    QPID_CLIENT_EXTERN bool isValid() const { return impl; }
++    QPID_CLIENT_INLINE_EXTERN bool isValid() const { return impl; }
+ 
+     /**@return true if handle is null. It is an error to call any function on a null handle. */
+-    QPID_CLIENT_EXTERN bool isNull() const { return !impl; }
++    QPID_CLIENT_INLINE_EXTERN bool isNull() const { return !impl; }
+ 
+     /** Conversion to bool supports idiom if (handle) { handle->... } */
+-    QPID_CLIENT_EXTERN operator bool() const { return impl; }
++    QPID_CLIENT_INLINE_EXTERN operator bool() const { return impl; }
+ 
+     /** Operator ! supports idiom if (!handle) { do_if_handle_is_null(); } */
+-    QPID_CLIENT_EXTERN bool operator !() const { return !impl; }
++    QPID_CLIENT_INLINE_EXTERN bool operator !() const { return !impl; }
+ 
+     void swap(Handle<T>& h) { T* t = h.impl; h.impl = impl; impl = t; }
+ 
+   protected:
+     typedef T Impl;
+-    QPID_CLIENT_EXTERN Handle() :impl() {}
++    QPID_CLIENT_INLINE_EXTERN Handle() :impl() {}
+ 
+     // Not implemented,subclasses must implement.
+     QPID_CLIENT_EXTERN Handle(const Handle&);
+diff --git a/qpid/cpp/include/qpid/client/LocalQueue.h b/qpid/cpp/include/qpid/client/LocalQueue.h
+index 70e4ceb..1a19a84 100644
+--- a/qpid/cpp/include/qpid/client/LocalQueue.h
++++ b/qpid/cpp/include/qpid/client/LocalQueue.h
+@@ -71,7 +71,7 @@ template <class T> class PrivateImplRef;
+  * </ul>
+  */
+ 
+-class LocalQueue : public Handle<LocalQueueImpl> {
++class QPID_CLIENT_CLASS_EXTERN LocalQueue : public Handle<LocalQueueImpl> {
+   public:
+     /** Create a local queue. Subscribe the local queue to a remote broker
+      * queue with a SubscriptionManager.
+diff --git a/qpid/cpp/include/qpid/client/Message.h b/qpid/cpp/include/qpid/client/Message.h
+index 2401cbd..ba50dda 100644
+--- a/qpid/cpp/include/qpid/client/Message.h
++++ b/qpid/cpp/include/qpid/client/Message.h
+@@ -112,7 +112,7 @@ class MessageImpl;
+  *
+  *
+  */
+-class Message
++class QPID_CLIENT_CLASS_EXTERN Message
+ {
+ public:
+     /** Create a Message.
+diff --git a/qpid/cpp/include/qpid/client/MessageListener.h b/qpid/cpp/include/qpid/client/MessageListener.h
+index d200f8c..3ca2fa9 100644
+--- a/qpid/cpp/include/qpid/client/MessageListener.h
++++ b/qpid/cpp/include/qpid/client/MessageListener.h
+@@ -84,7 +84,7 @@ namespace client {
+      *
+      */
+ 
+-    class MessageListener{
++    class QPID_CLIENT_CLASS_EXTERN MessageListener{
+     public:
+         QPID_CLIENT_EXTERN virtual ~MessageListener();
+ 
+diff --git a/qpid/cpp/include/qpid/client/MessageReplayTracker.h b/qpid/cpp/include/qpid/client/MessageReplayTracker.h
+index 6f5a0f4..06a3f29 100644
+--- a/qpid/cpp/include/qpid/client/MessageReplayTracker.h
++++ b/qpid/cpp/include/qpid/client/MessageReplayTracker.h
+@@ -34,7 +34,7 @@ namespace client {
+  * Utility to track messages sent asynchronously, allowing those that
+  * are indoubt to be replayed over a new session.
+  */
+-class MessageReplayTracker
++class QPID_CLIENT_CLASS_EXTERN MessageReplayTracker
+ {
+   public:
+     QPID_CLIENT_EXTERN MessageReplayTracker(uint flushInterval);
+diff --git a/qpid/cpp/include/qpid/client/QueueOptions.h b/qpid/cpp/include/qpid/client/QueueOptions.h
+index f8a4963..3984b63 100644
+--- a/qpid/cpp/include/qpid/client/QueueOptions.h
++++ b/qpid/cpp/include/qpid/client/QueueOptions.h
+@@ -35,7 +35,7 @@ enum QueueOrderingPolicy {FIFO, LVQ, LVQ_NO_BROWSE};
+  * A help class to set options on the Queue. Create a configured args while
+  * still allowing any custom configuration via the FieldTable base class
+  */
+-class QueueOptions: public framing::FieldTable
++class QPID_CLIENT_CLASS_EXTERN QueueOptions: public framing::FieldTable
+ {
+   public:
+     QPID_CLIENT_EXTERN QueueOptions();
+diff --git a/qpid/cpp/include/qpid/client/SessionBase_0_10.h b/qpid/cpp/include/qpid/client/SessionBase_0_10.h
+index 3b5c84e..ea50ab3 100644
+--- a/qpid/cpp/include/qpid/client/SessionBase_0_10.h
++++ b/qpid/cpp/include/qpid/client/SessionBase_0_10.h
+@@ -54,7 +54,7 @@ enum CreditUnit { MESSAGE_CREDIT=0, BYTE_CREDIT=1, UNLIMITED_CREDIT=0xFFFFFFFF }
+  * Subclasses provide the AMQP commands for a given
+  * version of the protocol.
+  */
+-class SessionBase_0_10 {
++class QPID_CLIENT_CLASS_EXTERN SessionBase_0_10 {
+   public:
+ 
+     ///@internal
+diff --git a/qpid/cpp/include/qpid/client/Subscription.h b/qpid/cpp/include/qpid/client/Subscription.h
+index 425b6b9..bb9b98e 100644
+--- a/qpid/cpp/include/qpid/client/Subscription.h
++++ b/qpid/cpp/include/qpid/client/Subscription.h
+@@ -39,7 +39,7 @@ class SubscriptionManager;
+  * A handle to an active subscription. Provides methods to query the subscription status
+  * and control acknowledgement (acquire and accept) of messages.
+  */
+-class Subscription : public Handle<SubscriptionImpl> {
++class QPID_CLIENT_CLASS_EXTERN Subscription : public Handle<SubscriptionImpl> {
+   public:
+     QPID_CLIENT_EXTERN Subscription(SubscriptionImpl* = 0);
+     QPID_CLIENT_EXTERN Subscription(const Subscription&);
+@@ -91,13 +91,13 @@ class Subscription : public Handle<SubscriptionImpl> {
+     QPID_CLIENT_EXTERN void release(const SequenceSet& messageIds);
+ 
+     /* Acquire a single message */
+-    QPID_CLIENT_EXTERN void acquire(const Message& m) { acquire(SequenceSet(m.getId())); }
++    QPID_CLIENT_INLINE_EXTERN void acquire(const Message& m) { acquire(SequenceSet(m.getId())); }
+ 
+     /* Accept a single message */
+-    QPID_CLIENT_EXTERN void accept(const Message& m) { accept(SequenceSet(m.getId())); }
++    QPID_CLIENT_INLINE_EXTERN void accept(const Message& m) { accept(SequenceSet(m.getId())); }
+ 
+     /* Release a single message */
+-    QPID_CLIENT_EXTERN void release(const Message& m) { release(SequenceSet(m.getId())); }
++    QPID_CLIENT_INLINE_EXTERN void release(const Message& m) { release(SequenceSet(m.getId())); }
+ 
+     /** Get the session associated with this subscription */
+     QPID_CLIENT_EXTERN Session getSession() const;
+diff --git a/qpid/cpp/include/qpid/client/SubscriptionManager.h b/qpid/cpp/include/qpid/client/SubscriptionManager.h
+index e70e05f..b69819a 100644
+--- a/qpid/cpp/include/qpid/client/SubscriptionManager.h
++++ b/qpid/cpp/include/qpid/client/SubscriptionManager.h
+@@ -94,7 +94,7 @@ class SubscriptionManagerImpl;
+  * </ul>
+  *
+  */
+-class SubscriptionManager : public sys::Runnable, public Handle<SubscriptionManagerImpl>
++class QPID_CLIENT_CLASS_EXTERN SubscriptionManager : public sys::Runnable, public Handle<SubscriptionManagerImpl>
+ {
+   public:
+     /** Create a new SubscriptionManager associated with a session */
+diff --git a/qpid/cpp/include/qpid/console/Agent.h b/qpid/cpp/include/qpid/console/Agent.h
+index 97d75da..629dd71 100644
+--- a/qpid/cpp/include/qpid/console/Agent.h
++++ b/qpid/cpp/include/qpid/console/Agent.h
+@@ -31,17 +31,17 @@ namespace console {
+      *
+      * \ingroup qmfconsoleapi
+      */
+-    class QPID_CONSOLE_EXTERN Agent {
++    class QPID_CONSOLE_CLASS_EXTERN Agent {
+     public:
+         typedef std::vector<Agent*> Vector;
+ 
+-        Agent(Broker* _broker, uint32_t _bank, const std::string& _label) :
++        QPID_CONSOLE_INLINE_EXTERN Agent(Broker* _broker, uint32_t _bank, const std::string& _label) :
+             broker(_broker), brokerBank(broker->getBrokerBank()),
+             agentBank(_bank), label(_label) {}
+-        Broker* getBroker() const { return broker; }
+-        uint32_t getBrokerBank() const { return brokerBank; }
+-        uint32_t getAgentBank() const { return agentBank; }
+-        const std::string& getLabel() const { return label; }
++        QPID_CONSOLE_INLINE_EXTERN Broker* getBroker() const { return broker; }
++        QPID_CONSOLE_INLINE_EXTERN uint32_t getBrokerBank() const { return brokerBank; }
++        QPID_CONSOLE_INLINE_EXTERN uint32_t getAgentBank() const { return agentBank; }
++        QPID_CONSOLE_INLINE_EXTERN const std::string& getLabel() const { return label; }
+ 
+     private:
+         Broker* broker;
+@@ -50,7 +50,7 @@ namespace console {
+         const std::string label;
+     };
+ 
+-    QPID_CONSOLE_EXTERN std::ostream& operator<<(std::ostream& o, const Agent& agent);
++    std::ostream& operator<<(std::ostream& o, const Agent& agent);
+ }
+ }
+ 
+diff --git a/qpid/cpp/include/qpid/console/Broker.h b/qpid/cpp/include/qpid/console/Broker.h
+index 0b2d1bc..c2ba8ac 100644
+--- a/qpid/cpp/include/qpid/console/Broker.h
++++ b/qpid/cpp/include/qpid/console/Broker.h
+@@ -55,12 +55,12 @@ namespace console {
+                                    client::ConnectionSettings& settings);
+         QPID_CONSOLE_EXTERN ~Broker();
+ 
+-        QPID_CONSOLE_EXTERN bool isConnected() const { return connected; }
+-        QPID_CONSOLE_EXTERN const std::string& getError() const { return error; }
+-        QPID_CONSOLE_EXTERN const std::string& getSessionId() const { return amqpSessionId; }
+-        QPID_CONSOLE_EXTERN const framing::Uuid& getBrokerId() const { return brokerId; }
+-        QPID_CONSOLE_EXTERN uint32_t getBrokerBank() const { return 1; }
+-        QPID_CONSOLE_EXTERN void addBinding(const std::string& key) {
++        QPID_CONSOLE_INLINE_EXTERN bool isConnected() const { return connected; }
++        QPID_CONSOLE_INLINE_EXTERN const std::string& getError() const { return error; }
++        QPID_CONSOLE_INLINE_EXTERN const std::string& getSessionId() const { return amqpSessionId; }
++        QPID_CONSOLE_INLINE_EXTERN const framing::Uuid& getBrokerId() const { return brokerId; }
++        QPID_CONSOLE_INLINE_EXTERN uint32_t getBrokerBank() const { return 1; }
++        QPID_CONSOLE_INLINE_EXTERN void addBinding(const std::string& key) {
+             connThreadBody.bindExchange("qpid.management", key);
+         }
+         QPID_CONSOLE_EXTERN std::string getUrl() const;
+@@ -123,10 +123,10 @@ namespace console {
+         void setBrokerId(const framing::Uuid& id) { brokerId = id; }
+         void appendAgents(std::vector<Agent*>& agents) const;
+ 
+-        friend QPID_CONSOLE_EXTERN std::ostream& operator<<(std::ostream& o, const Broker& k);
++        friend std::ostream& operator<<(std::ostream& o, const Broker& k);
+     };
+ 
+-    QPID_CONSOLE_EXTERN std::ostream& operator<<(std::ostream& o, const Broker& k);
++    std::ostream& operator<<(std::ostream& o, const Broker& k);
+ }
+ }
+ 
+diff --git a/qpid/cpp/include/qpid/console/ConsoleImportExport.h b/qpid/cpp/include/qpid/console/ConsoleImportExport.h
+index c2d7cb3..0f9a37c 100644
+--- a/qpid/cpp/include/qpid/console/ConsoleImportExport.h
++++ b/qpid/cpp/include/qpid/console/ConsoleImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined(CONSOLE_EXPORT) || defined (qmfconsole_EXPORTS)
+-#define QPID_CONSOLE_EXTERN __declspec(dllexport)
++#  if defined(CONSOLE_EXPORT) || defined (qmfconsole_EXPORTS)
++#    define QPID_CONSOLE_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_CONSOLE_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_CONSOLE_CLASS_EXTERN
++#    define QPID_CONSOLE_INLINE_EXTERN QPID_CONSOLE_EXTERN
++#  else
++#    define QPID_CONSOLE_CLASS_EXTERN QPID_CONSOLE_EXTERN
++#    define QPID_CONSOLE_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_CONSOLE_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_CONSOLE_EXTERN
++#  define QPID_CONSOLE_EXTERN
++#  define QPID_CONSOLE_CLASS_EXTERN
++#  define QPID_CONSOLE_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/include/qpid/framing/Array.h b/qpid/cpp/include/qpid/framing/Array.h
+index d3bdd36..1e97be3 100644
+--- a/qpid/cpp/include/qpid/framing/Array.h
++++ b/qpid/cpp/include/qpid/framing/Array.h
+@@ -34,7 +34,7 @@ namespace framing {
+ 
+ class Buffer;
+ 
+-class Array
++class QPID_COMMON_CLASS_EXTERN Array
+ {
+   public:
+     typedef boost::shared_ptr<FieldValue> ValuePtr;
+@@ -55,25 +55,25 @@ class Array
+     //creates a longstr array
+     QPID_COMMON_EXTERN Array(const std::vector<std::string>& in);
+ 
+-    QPID_COMMON_EXTERN TypeCode getType() const { return type; }
++    QPID_COMMON_INLINE_EXTERN TypeCode getType() const { return type; }
+ 
+     // std collection interface.
+-    QPID_COMMON_EXTERN const_iterator begin() const { return values.begin(); }
+-    QPID_COMMON_EXTERN const_iterator end() const { return values.end(); }
+-    QPID_COMMON_EXTERN iterator begin() { return values.begin(); }
+-    QPID_COMMON_EXTERN iterator end(){ return values.end(); }
++    QPID_COMMON_INLINE_EXTERN const_iterator begin() const { return values.begin(); }
++    QPID_COMMON_INLINE_EXTERN const_iterator end() const { return values.end(); }
++    QPID_COMMON_INLINE_EXTERN iterator begin() { return values.begin(); }
++    QPID_COMMON_INLINE_EXTERN iterator end(){ return values.end(); }
+ 
+-    QPID_COMMON_EXTERN ValuePtr front() const { return values.front(); }
+-    QPID_COMMON_EXTERN ValuePtr back() const { return values.back(); }
+-    QPID_COMMON_EXTERN size_t size() const { return values.size(); }
++    QPID_COMMON_INLINE_EXTERN ValuePtr front() const { return values.front(); }
++    QPID_COMMON_INLINE_EXTERN ValuePtr back() const { return values.back(); }
++    QPID_COMMON_INLINE_EXTERN size_t size() const { return values.size(); }
+ 
+     QPID_COMMON_EXTERN void insert(iterator i, ValuePtr value);
+-    QPID_COMMON_EXTERN void erase(iterator i) { values.erase(i); }
+-    QPID_COMMON_EXTERN void push_back(ValuePtr value) { values.insert(end(), value); }
+-    QPID_COMMON_EXTERN void pop_back() { values.pop_back(); }
++    QPID_COMMON_INLINE_EXTERN void erase(iterator i) { values.erase(i); }
++    QPID_COMMON_INLINE_EXTERN void push_back(ValuePtr value) { values.insert(end(), value); }
++    QPID_COMMON_INLINE_EXTERN void pop_back() { values.pop_back(); }
+ 
+     // Non-std interface
+-    QPID_COMMON_EXTERN void add(ValuePtr value) { push_back(value); }
++    QPID_COMMON_INLINE_EXTERN void add(ValuePtr value) { push_back(value); }
+ 
+     template <class T>
+     void collect(std::vector<T>& out) const
+diff --git a/qpid/cpp/include/qpid/framing/Buffer.h b/qpid/cpp/include/qpid/framing/Buffer.h
+index 0458343..8b08e60 100644
+--- a/qpid/cpp/include/qpid/framing/Buffer.h
++++ b/qpid/cpp/include/qpid/framing/Buffer.h
+@@ -29,14 +29,14 @@
+ namespace qpid {
+ namespace framing {
+ 
+-struct OutOfBounds : qpid::Exception {
++struct QPID_COMMON_CLASS_EXTERN OutOfBounds : qpid::Exception {
+     OutOfBounds() : qpid::Exception(std::string("Out of Bounds")) {}
+ };
+ 
+ class Content;
+ class FieldTable;
+ 
+-class Buffer
++class QPID_COMMON_CLASS_EXTERN Buffer
+ {
+     uint32_t size;
+     char* data;
+@@ -72,12 +72,12 @@ class Buffer
+     QPID_COMMON_EXTERN void restore(bool reRecord = false);
+     QPID_COMMON_EXTERN void reset();
+ 
+-    QPID_COMMON_EXTERN uint32_t available() { return size - position; }
+-    QPID_COMMON_EXTERN uint32_t getSize() { return size; }
+-    QPID_COMMON_EXTERN uint32_t getPosition() { return position; }
+-    QPID_COMMON_EXTERN void setPosition(uint32_t p) { position = p; }
+-    QPID_COMMON_EXTERN Iterator getIterator() { return Iterator(*this); }
+-    QPID_COMMON_EXTERN char* getPointer() { return data; }
++    QPID_COMMON_INLINE_EXTERN uint32_t available() { return size - position; }
++    QPID_COMMON_INLINE_EXTERN uint32_t getSize() { return size; }
++    QPID_COMMON_INLINE_EXTERN uint32_t getPosition() { return position; }
++    QPID_COMMON_INLINE_EXTERN void setPosition(uint32_t p) { position = p; }
++    QPID_COMMON_INLINE_EXTERN Iterator getIterator() { return Iterator(*this); }
++    QPID_COMMON_INLINE_EXTERN char* getPointer() { return data; }
+ 
+     QPID_COMMON_EXTERN void putOctet(uint8_t i);
+     QPID_COMMON_EXTERN void putShort(uint16_t i);
+diff --git a/qpid/cpp/include/qpid/framing/FieldTable.h b/qpid/cpp/include/qpid/framing/FieldTable.h
+index fdb1a28..fed4311 100644
+--- a/qpid/cpp/include/qpid/framing/FieldTable.h
++++ b/qpid/cpp/include/qpid/framing/FieldTable.h
+@@ -56,7 +56,7 @@ class FieldTable
+     typedef ValueMap::reference reference;
+     typedef ValueMap::value_type value_type;
+ 
+-    QPID_COMMON_EXTERN FieldTable() {};
++    QPID_COMMON_INLINE_EXTERN FieldTable() {};
+     QPID_COMMON_EXTERN FieldTable(const FieldTable& ft);
+     QPID_COMMON_EXTERN ~FieldTable();
+     QPID_COMMON_EXTERN FieldTable& operator=(const FieldTable& ft);
+@@ -67,7 +67,7 @@ class FieldTable
+     QPID_COMMON_EXTERN int count() const;
+     QPID_COMMON_EXTERN void set(const std::string& name, const ValuePtr& value);
+     QPID_COMMON_EXTERN ValuePtr get(const std::string& name) const;
+-    QPID_COMMON_EXTERN bool isSet(const std::string& name) const { return get(name).get() != 0; }
++    QPID_COMMON_INLINE_EXTERN bool isSet(const std::string& name) const { return get(name).get() != 0; }
+ 
+     QPID_COMMON_EXTERN void setString(const std::string& name, const std::string& value);
+     QPID_COMMON_EXTERN void setInt(const std::string& name, const int value);
+diff --git a/qpid/cpp/include/qpid/framing/FieldValue.h b/qpid/cpp/include/qpid/framing/FieldValue.h
+index 19220e7..fd7b430 100644
+--- a/qpid/cpp/include/qpid/framing/FieldValue.h
++++ b/qpid/cpp/include/qpid/framing/FieldValue.h
+@@ -41,14 +41,14 @@ namespace framing {
+  *
+  * \ingroup clientapi
+  */
+-class FieldValueException : public qpid::Exception {};
++class QPID_COMMON_CLASS_EXTERN FieldValueException : public qpid::Exception {};
+ 
+ /**
+  * Exception thrown when we can't perform requested conversion
+  *
+  * \ingroup clientapi
+  */
+-struct InvalidConversionException : public FieldValueException {
++struct QPID_COMMON_CLASS_EXTERN InvalidConversionException : public FieldValueException {
+     InvalidConversionException() {}
+ };
+ 
+@@ -59,7 +59,7 @@ class List;
+  *
+  * \ingroup clientapi
+  */
+-class FieldValue {
++class QPID_COMMON_CLASS_EXTERN FieldValue {
+   public:
+     /*
+      * Abstract type for content of different types
+@@ -90,7 +90,7 @@ class FieldValue {
+     void encode(Buffer& buffer);
+     void decode(Buffer& buffer);
+     QPID_COMMON_EXTERN bool operator==(const FieldValue&) const;
+-    QPID_COMMON_EXTERN bool operator!=(const FieldValue& v) const { return !(*this == v); }
++    QPID_COMMON_INLINE_EXTERN bool operator!=(const FieldValue& v) const { return !(*this == v); }
+ 
+     QPID_COMMON_EXTERN void print(std::ostream& out) const;
+ 
+diff --git a/qpid/cpp/include/qpid/framing/List.h b/qpid/cpp/include/qpid/framing/List.h
+index 0f17c78..417fd4b 100644
+--- a/qpid/cpp/include/qpid/framing/List.h
++++ b/qpid/cpp/include/qpid/framing/List.h
+@@ -36,7 +36,7 @@ class FieldValue;
+ /**
+  * Representation of an AMQP 0-10 list
+  */
+-class List
++class QPID_COMMON_CLASS_EXTERN List
+ {
+   public:
+     typedef boost::shared_ptr<FieldValue> ValuePtr;
+@@ -53,19 +53,19 @@ class List
+     QPID_COMMON_EXTERN bool operator==(const List& other) const;
+ 
+     // std collection interface.
+-    QPID_COMMON_EXTERN const_iterator begin() const { return values.begin(); }
+-    QPID_COMMON_EXTERN const_iterator end() const { return values.end(); }
+-    QPID_COMMON_EXTERN iterator begin() { return values.begin(); }
+-    QPID_COMMON_EXTERN iterator end(){ return values.end(); }
++    QPID_COMMON_INLINE_EXTERN const_iterator begin() const { return values.begin(); }
++    QPID_COMMON_INLINE_EXTERN const_iterator end() const { return values.end(); }
++    QPID_COMMON_INLINE_EXTERN iterator begin() { return values.begin(); }
++    QPID_COMMON_INLINE_EXTERN iterator end(){ return values.end(); }
+ 
+-    QPID_COMMON_EXTERN ValuePtr front() const { return values.front(); }
+-    QPID_COMMON_EXTERN ValuePtr back() const { return values.back(); }
+-    QPID_COMMON_EXTERN size_t size() const { return values.size(); }
++    QPID_COMMON_INLINE_EXTERN ValuePtr front() const { return values.front(); }
++    QPID_COMMON_INLINE_EXTERN ValuePtr back() const { return values.back(); }
++    QPID_COMMON_INLINE_EXTERN size_t size() const { return values.size(); }
+ 
+-    QPID_COMMON_EXTERN iterator insert(iterator i, ValuePtr value) { return values.insert(i, value); }
+-    QPID_COMMON_EXTERN void erase(iterator i) { values.erase(i); }
+-    QPID_COMMON_EXTERN void push_back(ValuePtr value) { values.insert(end(), value); }
+-    QPID_COMMON_EXTERN void pop_back() { values.pop_back(); }
++    QPID_COMMON_INLINE_EXTERN iterator insert(iterator i, ValuePtr value) { return values.insert(i, value); }
++    QPID_COMMON_INLINE_EXTERN void erase(iterator i) { values.erase(i); }
++    QPID_COMMON_INLINE_EXTERN void push_back(ValuePtr value) { values.insert(end(), value); }
++    QPID_COMMON_INLINE_EXTERN void pop_back() { values.pop_back(); }
+ 
+   private:
+     Values values;
+diff --git a/qpid/cpp/include/qpid/framing/ProtocolVersion.h b/qpid/cpp/include/qpid/framing/ProtocolVersion.h
+index e7e75d7..30094c1 100644
+--- a/qpid/cpp/include/qpid/framing/ProtocolVersion.h
++++ b/qpid/cpp/include/qpid/framing/ProtocolVersion.h
+@@ -29,7 +29,7 @@ namespace qpid
+ namespace framing
+ {
+ 
+-class ProtocolVersion
++class QPID_COMMON_CLASS_EXTERN ProtocolVersion
+ {
+ private:
+     uint8_t major_;
+@@ -39,16 +39,16 @@ public:
+     explicit ProtocolVersion(uint8_t _major=0, uint8_t _minor=0)
+         : major_(_major), minor_(_minor) {}
+ 
+-    QPID_COMMON_EXTERN uint8_t getMajor() const { return major_; }
+-    QPID_COMMON_EXTERN void setMajor(uint8_t major) { major_ = major; }
+-    QPID_COMMON_EXTERN uint8_t getMinor() const { return minor_; }
+-    QPID_COMMON_EXTERN void setMinor(uint8_t minor) { minor_ = minor; }
++    QPID_COMMON_INLINE_EXTERN uint8_t getMajor() const { return major_; }
++    QPID_COMMON_INLINE_EXTERN void setMajor(uint8_t major) { major_ = major; }
++    QPID_COMMON_INLINE_EXTERN uint8_t getMinor() const { return minor_; }
++    QPID_COMMON_INLINE_EXTERN void setMinor(uint8_t minor) { minor_ = minor; }
+     QPID_COMMON_EXTERN const std::string toString() const;
+ 
+     QPID_COMMON_EXTERN ProtocolVersion& operator=(ProtocolVersion p);
+ 
+     QPID_COMMON_EXTERN bool operator==(ProtocolVersion p) const;
+-    QPID_COMMON_EXTERN bool operator!=(ProtocolVersion p) const { return ! (*this == p); }
++    QPID_COMMON_INLINE_EXTERN bool operator!=(ProtocolVersion p) const { return ! (*this == p); }
+ };
+ 
+ } // namespace framing
+diff --git a/qpid/cpp/include/qpid/framing/SequenceNumber.h b/qpid/cpp/include/qpid/framing/SequenceNumber.h
+index 1e53058..eed15a4 100644
+--- a/qpid/cpp/include/qpid/framing/SequenceNumber.h
++++ b/qpid/cpp/include/qpid/framing/SequenceNumber.h
+@@ -34,7 +34,7 @@ class Buffer;
+ /**
+  * 4-byte sequence number that 'wraps around'.
+  */
+-class SequenceNumber : public
++class QPID_COMMON_CLASS_EXTERN SequenceNumber : public
+ boost::equality_comparable<
+     SequenceNumber, boost::less_than_comparable<
+         SequenceNumber, boost::incrementable<
+diff --git a/qpid/cpp/include/qpid/framing/SequenceSet.h b/qpid/cpp/include/qpid/framing/SequenceSet.h
+index 39395e9..0a78e41 100644
+--- a/qpid/cpp/include/qpid/framing/SequenceSet.h
++++ b/qpid/cpp/include/qpid/framing/SequenceSet.h
+@@ -29,7 +29,7 @@ namespace qpid {
+ namespace framing {
+ class Buffer;
+ 
+-class SequenceSet : public RangeSet<SequenceNumber> {
++class QPID_COMMON_CLASS_EXTERN SequenceSet : public RangeSet<SequenceNumber> {
+   public:
+     SequenceSet() {}
+     SequenceSet(const RangeSet<SequenceNumber>& r)
+diff --git a/qpid/cpp/include/qpid/framing/StructHelper.h b/qpid/cpp/include/qpid/framing/StructHelper.h
+index fc9a790..21f9b91 100644
+--- a/qpid/cpp/include/qpid/framing/StructHelper.h
++++ b/qpid/cpp/include/qpid/framing/StructHelper.h
+@@ -30,7 +30,7 @@
+ namespace qpid {
+ namespace framing {
+ 
+-class StructHelper
++class QPID_COMMON_CLASS_EXTERN StructHelper
+ {
+ public:
+ 
+diff --git a/qpid/cpp/include/qpid/framing/Uuid.h b/qpid/cpp/include/qpid/framing/Uuid.h
+index d0a8d02..ccfd7e9 100644
+--- a/qpid/cpp/include/qpid/framing/Uuid.h
++++ b/qpid/cpp/include/qpid/framing/Uuid.h
+@@ -52,22 +52,22 @@ struct Uuid : public boost::array<uint8_t, 16> {
+     // boost::array gives us ==, < etc.
+ 
+     /** Copy from 16 bytes of data. */
+-    void assign(const uint8_t* data);
++    QPID_COMMON_EXTERN void assign(const uint8_t* data);
+ 
+     /** Set to a new unique identifier. */
+     QPID_COMMON_EXTERN void generate();
+ 
+     /** Set to all zeros. */
+-    void clear();
++    QPID_COMMON_EXTERN void clear();
+ 
+     /** Test for null (all zeros). */
+     QPID_COMMON_EXTERN bool isNull() const;
+-    operator bool() const { return !isNull(); }
+-    bool operator!() const { return isNull(); }
++    QPID_COMMON_INLINE_EXTERN operator bool() const { return !isNull(); }
++    QPID_COMMON_INLINE_EXTERN bool operator!() const { return isNull(); }
+ 
+     QPID_COMMON_EXTERN void encode(framing::Buffer& buf) const;
+     QPID_COMMON_EXTERN void decode(framing::Buffer& buf);
+-    QPID_COMMON_EXTERN uint32_t encodedSize() const
++    QPID_COMMON_INLINE_EXTERN uint32_t encodedSize() const
+         { return static_cast<uint32_t>(size()); }
+ 
+     /** String value in format 1b4e28ba-2fa1-11d2-883f-b9a761bde3fb. */
+diff --git a/qpid/cpp/include/qpid/log/Logger.h b/qpid/cpp/include/qpid/log/Logger.h
+index 783ab7b..2c2119e 100644
+--- a/qpid/cpp/include/qpid/log/Logger.h
++++ b/qpid/cpp/include/qpid/log/Logger.h
+@@ -33,7 +33,7 @@ namespace log {
+  * is handled by Logger::Output-derived classes instantiated by the
+  * platform's sink-related options.
+  */
+-class Logger : private boost::noncopyable {
++class QPID_COMMON_CLASS_EXTERN Logger : private boost::noncopyable {
+   public:
+     /** Flags indicating what to include in the log output */
+     enum FormatFlag { FILE=1, LINE=2, FUNCTION=4, LEVEL=8, TIME=16, THREAD=32};
+@@ -93,7 +93,7 @@ class Logger : private boost::noncopyable {
+     QPID_COMMON_EXTERN void clear();
+ 
+     /** Get the options used to configure the logger. */
+-    QPID_COMMON_EXTERN const Options& getOptions() const { return options; }
++    QPID_COMMON_INLINE_EXTERN const Options& getOptions() const { return options; }
+ 
+ 
+   private:
+diff --git a/qpid/cpp/include/qpid/management/ManagementObject.h b/qpid/cpp/include/qpid/management/ManagementObject.h
+index 747edda..16bf210 100644
+--- a/qpid/cpp/include/qpid/management/ManagementObject.h
++++ b/qpid/cpp/include/qpid/management/ManagementObject.h
+@@ -58,14 +58,14 @@ protected:
+     std::string agentName;
+     void fromString(const std::string&);
+ public:
+-    QPID_COMMON_EXTERN ObjectId() : agent(0), first(0), second(0), agentEpoch(0) {}
+-    QPID_COMMON_EXTERN ObjectId(const types::Variant& map) :
++    QPID_COMMON_INLINE_EXTERN ObjectId() : agent(0), first(0), second(0), agentEpoch(0) {}
++    QPID_COMMON_INLINE_EXTERN ObjectId(const types::Variant& map) :
+     agent(0), first(0), second(0), agentEpoch(0) { mapDecode(map.asMap()); }
+     QPID_COMMON_EXTERN ObjectId(uint8_t flags, uint16_t seq, uint32_t broker);
+     QPID_COMMON_EXTERN ObjectId(AgentAttachment* _agent, uint8_t flags, uint16_t seq);
+     QPID_COMMON_EXTERN ObjectId(std::istream&);
+     QPID_COMMON_EXTERN ObjectId(const std::string&);
+-    QPID_COMMON_EXTERN ObjectId(const std::string& agentAddress, const std::string& key,
++    QPID_COMMON_INLINE_EXTERN ObjectId(const std::string& agentAddress, const std::string& key,
+                                 uint64_t epoch=0) : agent(0), first(0), second(0),
+       agentEpoch(epoch), v2Key(key), agentName(agentAddress) {}
+ 
+@@ -76,15 +76,15 @@ public:
+     QPID_COMMON_EXTERN void mapEncode(types::Variant::Map& map) const;
+     QPID_COMMON_EXTERN void mapDecode(const types::Variant::Map& map);
+     QPID_COMMON_EXTERN operator types::Variant::Map() const;
+-    QPID_COMMON_EXTERN uint32_t encodedSize() const { return 16; };
++    QPID_COMMON_INLINE_EXTERN uint32_t encodedSize() const { return 16; };
+     QPID_COMMON_EXTERN void encode(std::string& buffer) const;
+     QPID_COMMON_EXTERN void decode(const std::string& buffer);
+     QPID_COMMON_EXTERN bool equalV1(const ObjectId &other) const;
+-    QPID_COMMON_EXTERN void setV2Key(const std::string& _key) { v2Key = _key; }
++    QPID_COMMON_INLINE_EXTERN void setV2Key(const std::string& _key) { v2Key = _key; }
+     QPID_COMMON_EXTERN void setV2Key(const ManagementObject& object);
+-    QPID_COMMON_EXTERN void setAgentName(const std::string& _name) { agentName = _name; }
+-    QPID_COMMON_EXTERN const std::string& getAgentName() const { return agentName; }
+-    QPID_COMMON_EXTERN const std::string& getV2Key() const { return v2Key; }
++    QPID_COMMON_INLINE_EXTERN void setAgentName(const std::string& _name) { agentName = _name; }
++    QPID_COMMON_INLINE_EXTERN const std::string& getAgentName() const { return agentName; }
++    QPID_COMMON_INLINE_EXTERN const std::string& getV2Key() const { return v2Key; }
+     friend QPID_COMMON_EXTERN std::ostream& operator<<(std::ostream&, const ObjectId&);
+ };
+ 
+@@ -131,7 +131,7 @@ public:
+     virtual ~ManagementItem() {}
+ };
+ 
+-class ManagementObject : public ManagementItem
++class QPID_COMMON_CLASS_EXTERN ManagementObject : public ManagementItem
+ {
+ protected:
+ 
+diff --git a/qpid/cpp/include/qpid/messaging/Address.h b/qpid/cpp/include/qpid/messaging/Address.h
+index bebbfc7..63dce0c 100644
+--- a/qpid/cpp/include/qpid/messaging/Address.h
++++ b/qpid/cpp/include/qpid/messaging/Address.h
+@@ -119,7 +119,7 @@ class AddressImpl;
+  * 
+  * An address has value semantics.
+  */
+-class Address
++class QPID_MESSAGING_CLASS_EXTERN Address
+ {
+   public:
+     QPID_MESSAGING_EXTERN Address();
+diff --git a/qpid/cpp/include/qpid/messaging/Connection.h b/qpid/cpp/include/qpid/messaging/Connection.h
+index 1ad7a72..e938f23 100644
+--- a/qpid/cpp/include/qpid/messaging/Connection.h
++++ b/qpid/cpp/include/qpid/messaging/Connection.h
+@@ -42,7 +42,7 @@ class Session;
+  * A connection represents a network connection to a remote endpoint.
+  */
+ 
+-class Connection : public qpid::messaging::Handle<ConnectionImpl>
++class QPID_MESSAGING_CLASS_EXTERN Connection : public qpid::messaging::Handle<ConnectionImpl>
+ {
+   public:
+     QPID_MESSAGING_EXTERN Connection(ConnectionImpl* impl);
+diff --git a/qpid/cpp/include/qpid/messaging/Duration.h b/qpid/cpp/include/qpid/messaging/Duration.h
+index abcf169..9afec60 100644
+--- a/qpid/cpp/include/qpid/messaging/Duration.h
++++ b/qpid/cpp/include/qpid/messaging/Duration.h
+@@ -32,7 +32,7 @@ namespace messaging {
+ /**   \ingroup messaging 
+  * A duration is a time in milliseconds.
+  */
+-class Duration
++class QPID_MESSAGING_CLASS_EXTERN Duration
+ {
+   public:
+     QPID_MESSAGING_EXTERN explicit Duration(uint64_t milliseconds);
+@@ -46,9 +46,9 @@ class Duration
+ };
+ 
+ QPID_MESSAGING_EXTERN Duration operator*(const Duration& duration,
+-                                      uint64_t multiplier);
++                                         uint64_t multiplier);
+ QPID_MESSAGING_EXTERN Duration operator*(uint64_t multiplier,
+-                                      const Duration& duration);
++                                         const Duration& duration);
+ 
+ }} // namespace qpid::messaging
+ 
+diff --git a/qpid/cpp/include/qpid/messaging/FailoverUpdates.h b/qpid/cpp/include/qpid/messaging/FailoverUpdates.h
+index 14a1a31..6d73146 100644
+--- a/qpid/cpp/include/qpid/messaging/FailoverUpdates.h
++++ b/qpid/cpp/include/qpid/messaging/FailoverUpdates.h
+@@ -32,7 +32,7 @@ struct FailoverUpdatesImpl;
+  * A utility to listen for updates on cluster membership and update
+  * the list of known urls for a connection accordingly.
+  */
+-class FailoverUpdates
++class QPID_MESSAGING_CLASS_EXTERN FailoverUpdates
+ {
+   public:
+     QPID_MESSAGING_EXTERN FailoverUpdates(Connection& connection);
+diff --git a/qpid/cpp/include/qpid/messaging/Handle.h b/qpid/cpp/include/qpid/messaging/Handle.h
+index 1e634ef..97a8f00 100644
+--- a/qpid/cpp/include/qpid/messaging/Handle.h
++++ b/qpid/cpp/include/qpid/messaging/Handle.h
+@@ -40,22 +40,22 @@ template <class T> class Handle {
+   public:
+ 
+     /**@return true if handle is valid,  i.e. not null. */
+-    QPID_MESSAGING_EXTERN bool isValid() const { return impl; }
++    QPID_MESSAGING_INLINE_EXTERN bool isValid() const { return impl; }
+ 
+     /**@return true if handle is null. It is an error to call any function on a null handle. */
+-    QPID_MESSAGING_EXTERN bool isNull() const { return !impl; }
++    QPID_MESSAGING_INLINE_EXTERN bool isNull() const { return !impl; }
+ 
+     /** Conversion to bool supports idiom if (handle) { handle->... } */
+-    QPID_MESSAGING_EXTERN operator bool() const { return impl; }
++    QPID_MESSAGING_INLINE_EXTERN operator bool() const { return impl; }
+ 
+     /** Operator ! supports idiom if (!handle) { do_if_handle_is_null(); } */
+-    QPID_MESSAGING_EXTERN bool operator !() const { return !impl; }
++    QPID_MESSAGING_INLINE_EXTERN bool operator !() const { return !impl; }
+ 
+     void swap(Handle<T>& h) { T* t = h.impl; h.impl = impl; impl = t; }
+ 
+   protected:
+     typedef T Impl;
+-    QPID_MESSAGING_EXTERN Handle() :impl() {}
++    QPID_MESSAGING_INLINE_EXTERN Handle() :impl() {}
+ 
+     // Not implemented,subclasses must implement.
+     QPID_MESSAGING_EXTERN Handle(const Handle&);
+diff --git a/qpid/cpp/include/qpid/messaging/ImportExport.h b/qpid/cpp/include/qpid/messaging/ImportExport.h
+index 52f3eb8..78c3e7a 100644
+--- a/qpid/cpp/include/qpid/messaging/ImportExport.h
++++ b/qpid/cpp/include/qpid/messaging/ImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined(CLIENT_EXPORT) || defined (qpidmessaging_EXPORTS)
+-#define QPID_MESSAGING_EXTERN __declspec(dllexport)
++#  if defined(CLIENT_EXPORT) || defined (qpidmessaging_EXPORTS)
++#    define QPID_MESSAGING_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_MESSAGING_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_MESSAGING_CLASS_EXTERN
++#    define QPID_MESSAGING_INLINE_EXTERN QPID_MESSAGING_EXTERN
++#  else
++#    define QPID_MESSAGING_CLASS_EXTERN QPID_MESSAGING_EXTERN
++#    define QPID_MESSAGING_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_MESSAGING_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_MESSAGING_EXTERN
++#  define QPID_MESSAGING_EXTERN
++#  define QPID_MESSAGING_CLASS_EXTERN
++#  define QPID_MESSAGING_INLINE_EXTERN
+ #endif
+ 
+ #endif  /*!QPID_MESSAGING_IMPORTEXPORT_H*/
+diff --git a/qpid/cpp/include/qpid/messaging/Message.h b/qpid/cpp/include/qpid/messaging/Message.h
+index d48af35..5cd978f 100644
+--- a/qpid/cpp/include/qpid/messaging/Message.h
++++ b/qpid/cpp/include/qpid/messaging/Message.h
+@@ -39,7 +39,7 @@ struct MessageImpl;
+ /**   \ingroup messaging 
+  * Representation of a message.
+  */
+-class Message
++class QPID_MESSAGING_CLASS_EXTERN Message
+ {
+   public:
+     QPID_MESSAGING_EXTERN Message(const std::string& bytes = std::string());
+@@ -107,9 +107,9 @@ class Message
+     friend struct MessageImplAccess;
+ };
+ 
+-struct EncodingException : qpid::types::Exception
++struct QPID_MESSAGING_CLASS_EXTERN EncodingException : qpid::types::Exception
+ {
+-    EncodingException(const std::string& msg);
++    QPID_MESSAGING_EXTERN EncodingException(const std::string& msg);
+ };
+ 
+ /**
+@@ -122,8 +122,8 @@ struct EncodingException : qpid::types::Exception
+  * @exception EncodingException
+  */
+ QPID_MESSAGING_EXTERN void decode(const Message& message,
+-                               qpid::types::Variant::Map& map,
+-                               const std::string& encoding = std::string());
++                                  qpid::types::Variant::Map& map,
++                                  const std::string& encoding = std::string());
+ /**
+  * Decodes message content into a Variant::List.
+  * 
+@@ -134,8 +134,8 @@ QPID_MESSAGING_EXTERN void decode(const Message& message,
+  * @exception EncodingException
+  */
+ QPID_MESSAGING_EXTERN void decode(const Message& message,
+-                               qpid::types::Variant::List& list,
+-                               const std::string& encoding = std::string());
++                                  qpid::types::Variant::List& list,
++                                  const std::string& encoding = std::string());
+ /**
+  * Encodes a Variant::Map into a message.
+  * 
+@@ -146,8 +146,8 @@ QPID_MESSAGING_EXTERN void decode(const Message& message,
+  * @exception EncodingException
+  */
+ QPID_MESSAGING_EXTERN void encode(const qpid::types::Variant::Map& map,
+-                               Message& message,
+-                               const std::string& encoding = std::string());
++                                  Message& message,
++                                  const std::string& encoding = std::string());
+ /**
+  * Encodes a Variant::List into a message.
+  * 
+@@ -158,8 +158,8 @@ QPID_MESSAGING_EXTERN void encode(const qpid::types::Variant::Map& map,
+  * @exception EncodingException
+  */
+ QPID_MESSAGING_EXTERN void encode(const qpid::types::Variant::List& list,
+-                               Message& message,
+-                               const std::string& encoding = std::string());
++                                  Message& message,
++                                  const std::string& encoding = std::string());
+ 
+ }} // namespace qpid::messaging
+ 
+diff --git a/qpid/cpp/include/qpid/messaging/Receiver.h b/qpid/cpp/include/qpid/messaging/Receiver.h
+index 6f3ae96..13317df 100644
+--- a/qpid/cpp/include/qpid/messaging/Receiver.h
++++ b/qpid/cpp/include/qpid/messaging/Receiver.h
+@@ -41,7 +41,7 @@ class Session;
+ /**   \ingroup messaging 
+  * Interface through which messages are received.
+  */
+-class Receiver : public qpid::messaging::Handle<ReceiverImpl>
++class QPID_MESSAGING_CLASS_EXTERN Receiver : public qpid::messaging::Handle<ReceiverImpl>
+ {
+   public:
+     QPID_MESSAGING_EXTERN Receiver(ReceiverImpl* impl = 0);
+diff --git a/qpid/cpp/include/qpid/messaging/Sender.h b/qpid/cpp/include/qpid/messaging/Sender.h
+index 85658f3..8e1c584 100644
+--- a/qpid/cpp/include/qpid/messaging/Sender.h
++++ b/qpid/cpp/include/qpid/messaging/Sender.h
+@@ -40,7 +40,7 @@ class Session;
+ /**   \ingroup messaging 
+  * Interface through which messages are sent.
+  */
+-class Sender : public qpid::messaging::Handle<SenderImpl>
++class QPID_MESSAGING_CLASS_EXTERN Sender : public qpid::messaging::Handle<SenderImpl>
+ {
+   public:
+     QPID_MESSAGING_EXTERN Sender(SenderImpl* impl = 0);
+diff --git a/qpid/cpp/include/qpid/messaging/Session.h b/qpid/cpp/include/qpid/messaging/Session.h
+index 6c02362..52786eb 100644
+--- a/qpid/cpp/include/qpid/messaging/Session.h
++++ b/qpid/cpp/include/qpid/messaging/Session.h
+@@ -46,7 +46,7 @@ class SessionImpl;
+  * A session represents a distinct 'conversation' which can involve
+  * sending and receiving messages to and from different addresses.
+  */
+-class Session : public qpid::messaging::Handle<SessionImpl>
++class QPID_MESSAGING_CLASS_EXTERN Session : public qpid::messaging::Handle<SessionImpl>
+ {
+   public:
+     QPID_MESSAGING_EXTERN Session(SessionImpl* impl = 0);
+diff --git a/qpid/cpp/include/qpid/messaging/exceptions.h b/qpid/cpp/include/qpid/messaging/exceptions.h
+index 0ff608b..07d1dc4 100644
+--- a/qpid/cpp/include/qpid/messaging/exceptions.h
++++ b/qpid/cpp/include/qpid/messaging/exceptions.h
+@@ -32,7 +32,7 @@ namespace messaging {
+ /** \ingroup messaging 
+  */
+ 
+-struct MessagingException : public qpid::types::Exception 
++struct QPID_MESSAGING_CLASS_EXTERN MessagingException : public qpid::types::Exception 
+ {
+     QPID_MESSAGING_EXTERN MessagingException(const std::string& msg);
+     QPID_MESSAGING_EXTERN virtual ~MessagingException() throw();
+@@ -41,22 +41,22 @@ struct MessagingException : public qpid::types::Exception
+     //TODO: override what() to include detail if present
+ };
+ 
+-struct InvalidOptionString : public MessagingException 
++struct QPID_MESSAGING_CLASS_EXTERN InvalidOptionString : public MessagingException 
+ {
+     QPID_MESSAGING_EXTERN InvalidOptionString(const std::string& msg);
+ };
+ 
+-struct KeyError : public MessagingException
++struct QPID_MESSAGING_CLASS_EXTERN KeyError : public MessagingException
+ {
+     QPID_MESSAGING_EXTERN KeyError(const std::string&);
+ };
+ 
+-struct LinkError : public MessagingException
++struct QPID_MESSAGING_CLASS_EXTERN LinkError : public MessagingException
+ {
+     QPID_MESSAGING_EXTERN LinkError(const std::string&);
+ };
+ 
+-struct AddressError : public LinkError
++struct QPID_MESSAGING_CLASS_EXTERN AddressError : public LinkError
+ {
+     QPID_MESSAGING_EXTERN AddressError(const std::string&);
+ };
+@@ -65,17 +65,17 @@ struct AddressError : public LinkError
+  * Thrown when a syntactically correct address cannot be resolved or
+  * used.
+  */
+-struct ResolutionError : public AddressError 
++struct QPID_MESSAGING_CLASS_EXTERN ResolutionError : public AddressError 
+ {
+     QPID_MESSAGING_EXTERN ResolutionError(const std::string& msg);
+ };
+ 
+-struct AssertionFailed : public ResolutionError 
++struct QPID_MESSAGING_CLASS_EXTERN AssertionFailed : public ResolutionError 
+ {
+     QPID_MESSAGING_EXTERN AssertionFailed(const std::string& msg);
+ };
+ 
+-struct NotFound : public ResolutionError 
++struct QPID_MESSAGING_CLASS_EXTERN NotFound : public ResolutionError 
+ {
+     QPID_MESSAGING_EXTERN NotFound(const std::string& msg);
+ };
+@@ -83,67 +83,67 @@ struct NotFound : public ResolutionError
+ /**
+  * Thrown when an address string with inalid sytanx is used.
+  */
+-struct MalformedAddress : public AddressError 
++struct QPID_MESSAGING_CLASS_EXTERN MalformedAddress : public AddressError 
+ {
+     QPID_MESSAGING_EXTERN MalformedAddress(const std::string& msg);
+ };
+ 
+-struct ReceiverError : public LinkError
++struct QPID_MESSAGING_CLASS_EXTERN ReceiverError : public LinkError
+ {
+     QPID_MESSAGING_EXTERN ReceiverError(const std::string&);
+ };
+ 
+-struct FetchError : public ReceiverError
++struct QPID_MESSAGING_CLASS_EXTERN FetchError : public ReceiverError
+ {
+     QPID_MESSAGING_EXTERN FetchError(const std::string&);
+ };
+ 
+-struct NoMessageAvailable : public FetchError
++struct QPID_MESSAGING_CLASS_EXTERN NoMessageAvailable : public FetchError
+ {
+     QPID_MESSAGING_EXTERN NoMessageAvailable();
+ };
+ 
+-struct SenderError : public LinkError
++struct QPID_MESSAGING_CLASS_EXTERN SenderError : public LinkError
+ {
+     QPID_MESSAGING_EXTERN SenderError(const std::string&);
+ };
+ 
+-struct SendError : public SenderError
++struct QPID_MESSAGING_CLASS_EXTERN SendError : public SenderError
+ {
+     QPID_MESSAGING_EXTERN SendError(const std::string&);
+ };
+ 
+-struct TargetCapacityExceeded : public SendError
++struct QPID_MESSAGING_CLASS_EXTERN TargetCapacityExceeded : public SendError
+ {
+     QPID_MESSAGING_EXTERN TargetCapacityExceeded(const std::string&);
+ };
+ 
+-struct SessionError : public MessagingException
++struct QPID_MESSAGING_CLASS_EXTERN SessionError : public MessagingException
+ {
+     QPID_MESSAGING_EXTERN SessionError(const std::string&);
+ };
+ 
+-struct TransactionError : public SessionError
++struct QPID_MESSAGING_CLASS_EXTERN TransactionError : public SessionError
+ {
+     QPID_MESSAGING_EXTERN TransactionError(const std::string&);
+ };
+ 
+-struct TransactionAborted : public TransactionError
++struct QPID_MESSAGING_CLASS_EXTERN TransactionAborted : public TransactionError
+ {
+     QPID_MESSAGING_EXTERN TransactionAborted(const std::string&);
+ };
+ 
+-struct UnauthorizedAccess : public SessionError
++struct QPID_MESSAGING_CLASS_EXTERN UnauthorizedAccess : public SessionError
+ {
+     QPID_MESSAGING_EXTERN UnauthorizedAccess(const std::string&);
+ };
+ 
+-struct ConnectionError : public MessagingException
++struct QPID_MESSAGING_CLASS_EXTERN ConnectionError : public MessagingException
+ {
+     QPID_MESSAGING_EXTERN ConnectionError(const std::string&);
+ };
+ 
+-struct TransportFailure : public MessagingException
++struct QPID_MESSAGING_CLASS_EXTERN TransportFailure : public MessagingException
+ {
+     QPID_MESSAGING_EXTERN TransportFailure(const std::string&);
+ };
+diff --git a/qpid/cpp/include/qpid/sys/IntegerTypes.h b/qpid/cpp/include/qpid/sys/IntegerTypes.h
+index 89635f0..75fa921 100755
+--- a/qpid/cpp/include/qpid/sys/IntegerTypes.h
++++ b/qpid/cpp/include/qpid/sys/IntegerTypes.h
+@@ -21,7 +21,7 @@
+  *
+  */
+ 
+-#if (defined(_WINDOWS) || defined (WIN32)) && defined(_MSC_VER)
++#if (defined(_WINDOWS) || defined (WIN32))
+ #include "qpid/sys/windows/IntegerTypes.h"
+ #endif
+ #if !defined _WINDOWS && !defined WIN32
+diff --git a/qpid/cpp/include/qpid/sys/Runnable.h b/qpid/cpp/include/qpid/sys/Runnable.h
+index 0f1243a..fed7663 100644
+--- a/qpid/cpp/include/qpid/sys/Runnable.h
++++ b/qpid/cpp/include/qpid/sys/Runnable.h
+@@ -30,7 +30,7 @@ namespace sys {
+ /**
+  * Interface for objects that can be run, e.g. in a thread.
+  */
+-class Runnable
++class QPID_COMMON_CLASS_EXTERN Runnable
+ {
+   public:
+     /** Type to represent a runnable as a Functor */
+diff --git a/qpid/cpp/include/qpid/sys/Thread.h b/qpid/cpp/include/qpid/sys/Thread.h
+index 45a39e7..f556612 100644
+--- a/qpid/cpp/include/qpid/sys/Thread.h
++++ b/qpid/cpp/include/qpid/sys/Thread.h
+@@ -25,7 +25,11 @@
+ #include "qpid/CommonImportExport.h"
+ 
+ #ifdef _WIN32
+-#  define QPID_TSS __declspec(thread)
++#  ifdef _MSC_VER
++#    define QPID_TSS __declspec(thread)
++#  else
++#    define QPID_TSS __thread
++#  endif
+ #elif defined (__GNUC__)
+ #  define QPID_TSS __thread
+ #elif defined (__SUNPRO_CC)
+diff --git a/qpid/cpp/include/qpid/sys/Time.h b/qpid/cpp/include/qpid/sys/Time.h
+index d3ab832..14b14ec 100644
+--- a/qpid/cpp/include/qpid/sys/Time.h
++++ b/qpid/cpp/include/qpid/sys/Time.h
+@@ -119,7 +119,7 @@ class Duration {
+     friend class AbsTime;
+ 
+ public:
+-    QPID_COMMON_EXTERN inline Duration(int64_t time0 = 0);
++    QPID_COMMON_INLINE_EXTERN inline Duration(int64_t time0 = 0);
+     QPID_COMMON_EXTERN explicit Duration(const AbsTime& start, const AbsTime& finish);
+     inline operator int64_t() const;
+ };
+diff --git a/qpid/cpp/include/qpid/sys/windows/IntegerTypes.h b/qpid/cpp/include/qpid/sys/windows/IntegerTypes.h
+index ece1a61..fff320b 100755
+--- a/qpid/cpp/include/qpid/sys/windows/IntegerTypes.h
++++ b/qpid/cpp/include/qpid/sys/windows/IntegerTypes.h
+@@ -22,13 +22,17 @@
+  */
+ 
+ typedef unsigned char    uint8_t;
+-typedef char             int8_t;
+ typedef unsigned short   uint16_t;
+ typedef short            int16_t;
+ typedef unsigned int     uint32_t;
+ typedef int              int32_t;
++#if defined(_MSC_VER)
++typedef char             int8_t;
+ typedef unsigned __int64 uint64_t;
+ typedef          __int64 int64_t;
++#else
++#include <stdint.h>
++#endif
+ 
+ // Visual Studio doesn't define other common types, so set them up here too.
+ typedef unsigned int     uint;
+diff --git a/qpid/cpp/include/qpid/types/Exception.h b/qpid/cpp/include/qpid/types/Exception.h
+index d061a7d..483d104 100644
+--- a/qpid/cpp/include/qpid/types/Exception.h
++++ b/qpid/cpp/include/qpid/types/Exception.h
+@@ -28,7 +28,7 @@
+ namespace qpid {
+ namespace types {
+ 
+-class Exception : public std::exception
++class QPID_TYPES_CLASS_EXTERN Exception : public std::exception
+ {
+   public:
+     QPID_TYPES_EXTERN explicit Exception(const std::string& message=std::string()) throw();
+diff --git a/qpid/cpp/include/qpid/types/ImportExport.h b/qpid/cpp/include/qpid/types/ImportExport.h
+index bb10575..491f6e7 100644
+--- a/qpid/cpp/include/qpid/types/ImportExport.h
++++ b/qpid/cpp/include/qpid/types/ImportExport.h
+@@ -21,13 +21,22 @@
+  */
+ 
+ #if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
+-#if defined(TYPES_EXPORT) || defined (qpidtypes_EXPORTS)
+-#define QPID_TYPES_EXTERN __declspec(dllexport)
++#  if defined(TYPES_EXPORT) || defined (qpidtypes_EXPORTS)
++#    define QPID_TYPES_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_TYPES_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_TYPES_CLASS_EXTERN
++#    define QPID_TYPES_INLINE_EXTERN QPID_TYPES_EXTERN
++#  else
++#    define QPID_TYPES_CLASS_EXTERN QPID_TYPES_EXTERN
++#    define QPID_TYPES_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_TYPES_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_TYPES_EXTERN
++#  define QPID_TYPES_EXTERN
++#  define QPID_TYPES_CLASS_EXTERN
++#  define QPID_TYPES_INLINE_EXTERN
+ #endif
+ 
+ #endif  /*!QPID_TYPES_IMPORTEXPORT_H*/
+diff --git a/qpid/cpp/include/qpid/types/Uuid.h b/qpid/cpp/include/qpid/types/Uuid.h
+index 467a895..02af4c7 100644
+--- a/qpid/cpp/include/qpid/types/Uuid.h
++++ b/qpid/cpp/include/qpid/types/Uuid.h
+@@ -29,7 +29,7 @@
+ namespace qpid {
+ namespace types {
+ 
+-class Uuid
++class QPID_TYPES_CLASS_EXTERN Uuid
+ {
+   public:
+     static const size_t SIZE;
+diff --git a/qpid/cpp/include/qpid/types/Variant.h b/qpid/cpp/include/qpid/types/Variant.h
+index 876e1a2..50e2730 100644
+--- a/qpid/cpp/include/qpid/types/Variant.h
++++ b/qpid/cpp/include/qpid/types/Variant.h
+@@ -36,7 +36,7 @@ namespace types {
+ /**
+  * Thrown when an illegal conversion of a variant is attempted.
+  */
+-struct InvalidConversion : public Exception 
++struct QPID_TYPES_CLASS_EXTERN InvalidConversion : public Exception 
+ {
+     InvalidConversion(const std::string& msg);
+ };
+@@ -67,7 +67,7 @@ class VariantImpl;
+ /**
+  * Represents a value of variable type.
+  */
+-class Variant
++class QPID_TYPES_CLASS_EXTERN Variant
+ {
+   public:
+     typedef std::map<std::string, Variant> Map;
+diff --git a/qpid/cpp/rubygen/0-10/specification.rb b/qpid/cpp/rubygen/0-10/specification.rb
+index 7366599..ef193f5 100755
+--- a/qpid/cpp/rubygen/0-10/specification.rb
++++ b/qpid/cpp/rubygen/0-10/specification.rb
+@@ -252,7 +252,7 @@ class Specification < CppGen
+       include "#{@dir}/specification"
+       namespace(@ns) { 
+         genl "template <class F, class R=typename F::result_type>"
+-        cpp_class("ProxyTemplate") {
++        cpp_extern_class("QPID_COMMON_CLASS_EXTERN", "ProxyTemplate") {
+           public
+           genl "ProxyTemplate(F f=F()) : functor(f) {}"
+           @amqp.classes.each { |c|
+diff --git a/qpid/cpp/rubygen/MethodBodyDefaultVisitor.rb b/qpid/cpp/rubygen/MethodBodyDefaultVisitor.rb
+index 4f9b369..11dbcb8 100755
+--- a/qpid/cpp/rubygen/MethodBodyDefaultVisitor.rb
++++ b/qpid/cpp/rubygen/MethodBodyDefaultVisitor.rb
+@@ -33,7 +33,7 @@ class MethodBodyDefaultVisitorGen < CppGen
+       include "qpid/framing/MethodBodyConstVisitor"
+       namespace(@namespace) { 
+         genl
+-        cpp_class(@classname, "public MethodBodyConstVisitor") {
++        cpp_extern_class("QPID_COMMON_CLASS_EXTERN", @classname, "public MethodBodyConstVisitor") {
+           genl "public:"
+           genl "virtual void defaultVisit() = 0;"
+           @amqp.methods_.each { |m|
+diff --git a/qpid/cpp/rubygen/cppgen.rb b/qpid/cpp/rubygen/cppgen.rb
+index f099510..7dc21fe 100755
+--- a/qpid/cpp/rubygen/cppgen.rb
++++ b/qpid/cpp/rubygen/cppgen.rb
+@@ -377,6 +377,9 @@ class CppGen < Generator
+   def cpp_class(name, *bases, &block)
+     struct_class("class", name, bases, &block);
+   end
++  def cpp_extern_class(scope, name, *bases, &block)
++    struct_class("class "+scope, name, bases, &block);
++  end
+ 
+   def typedef(type, name) genl "typedef #{type} #{name};\n"; end
+ 
+diff --git a/qpid/cpp/rubygen/framing.0-10/MethodBodyDefaultVisitor.rb b/qpid/cpp/rubygen/framing.0-10/MethodBodyDefaultVisitor.rb
+index 00962de..4c58ff2 100755
+--- a/qpid/cpp/rubygen/framing.0-10/MethodBodyDefaultVisitor.rb
++++ b/qpid/cpp/rubygen/framing.0-10/MethodBodyDefaultVisitor.rb
+@@ -33,7 +33,7 @@ class MethodBodyDefaultVisitorGen < CppGen
+       include "qpid/CommonImportExport.h"
+       namespace(@namespace) { 
+         genl "class AMQMethodBody;"
+-        cpp_class(@classname, "public MethodBodyConstVisitor") {
++        cpp_extern_class("QPID_COMMON_CLASS_EXTERN", @classname, "public MethodBodyConstVisitor") {
+           genl "public:"
+           genl "virtual void defaultVisit(const AMQMethodBody&) = 0;"
+           @amqp.methods_.each { |m|
+diff --git a/qpid/cpp/rubygen/framing.0-10/OperationsInvoker.rb b/qpid/cpp/rubygen/framing.0-10/OperationsInvoker.rb
+index f9b6cac..f9b5ce5 100755
+--- a/qpid/cpp/rubygen/framing.0-10/OperationsInvoker.rb
++++ b/qpid/cpp/rubygen/framing.0-10/OperationsInvoker.rb
+@@ -69,7 +69,7 @@ class OperationsInvokerGen < CppGen
+   def invoker_h(invoker, target, methods)
+     return if methods.empty?
+     genl
+-    cpp_class(invoker, "public qpid::framing::Invoker") {
++    cpp_extern_class("QPID_COMMON_CLASS_EXTERN", invoker, "public qpid::framing::Invoker") {
+       genl "#{target}& target;"
+       public
+       genl("Invoker(#{target}& target_) : target(target_) {}")
+diff --git a/qpid/cpp/rubygen/framing.0-10/Proxy.rb b/qpid/cpp/rubygen/framing.0-10/Proxy.rb
+index 6e3cb4f..3325616 100755
+--- a/qpid/cpp/rubygen/framing.0-10/Proxy.rb
++++ b/qpid/cpp/rubygen/framing.0-10/Proxy.rb
+@@ -37,7 +37,7 @@ class ProxyGen < CppGen
+   
+   def inner_class_decl(c)
+     cname=c.name.caps
+-    cpp_class(cname, "public Proxy") {
++    cpp_extern_class("QPID_COMMON_CLASS_EXTERN", cname, "public Proxy") {
+           gen <<EOS
+ public:
+ #{cname}(FrameHandler& f) : Proxy(f) {}
+@@ -69,7 +69,7 @@ EOS
+       include "qpid/CommonImportExport.h"
+ 
+       namespace("qpid::framing") { 
+-        cpp_class(@classname, "public Proxy") {
++        cpp_extern_class("QPID_COMMON_CLASS_EXTERN", @classname, "public Proxy") {
+           public
+           genl "QPID_COMMON_EXTERN #{@classname}(FrameHandler& out);"
+           genl
+diff --git a/qpid/cpp/rubygen/framing.0-10/Session.rb b/qpid/cpp/rubygen/framing.0-10/Session.rb
+index 61f0e03..e800df9 100755
+--- a/qpid/cpp/rubygen/framing.0-10/Session.rb
++++ b/qpid/cpp/rubygen/framing.0-10/Session.rb
+@@ -56,8 +56,8 @@ module SyncAsync
+   def decl_ctor_opeq()
+     genl
+     genl "QPID_CLIENT_EXTERN #{@classname}();"
+-    genl "QPID_CLIENT_EXTERN #{@classname}(const #{@version_base}& other);"
+-    genl "QPID_CLIENT_EXTERN #{@classname}& operator=(const #{@version_base}& other);"
++    genl "QPID_CLIENT_INLINE_EXTERN #{@classname}(const #{@version_base}& other);"
++    genl "QPID_CLIENT_INLINE_EXTERN #{@classname}& operator=(const #{@version_base}& other);"
+   end
+ 
+   def defn_ctor_opeq(inline="")
+diff --git a/qpid/cpp/rubygen/framing.0-10/structs.rb b/qpid/cpp/rubygen/framing.0-10/structs.rb
+index c3684ae..62b33ce 100755
+--- a/qpid/cpp/rubygen/framing.0-10/structs.rb
++++ b/qpid/cpp/rubygen/framing.0-10/structs.rb
+@@ -406,7 +406,7 @@ EOS
+ namespace qpid {
+ namespace framing {
+ 
+-class #{classname} #{inheritance} {
++class QPID_COMMON_CLASS_EXTERN #{classname} #{inheritance} {
+ EOS
+   if (is_packed(s))
+     indent { s.fields.each { |f| genl "#{f.cpptype.name} #{f.cppname};" unless f.type_ == "bit"} }
+diff --git a/qpid/cpp/src/CMakeLists.txt b/qpid/cpp/src/CMakeLists.txt
+index d0ca2d9..d4da276 100644
+--- a/qpid/cpp/src/CMakeLists.txt
++++ b/qpid/cpp/src/CMakeLists.txt
+@@ -636,8 +636,7 @@ if (CMAKE_SYSTEM_NAME STREQUAL Windows)
+   )
+ 
+   set (qpidcommon_platform_LIBS
+-    ${windows_ssl_libs} ws2_32
+-  )
++    ${Boost_THREAD_LIBRARY} ${windows_ssl_libs} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY} ws2_32  )
+   set (qpidbroker_platform_SOURCES
+     qpid/broker/windows/BrokerDefaults.cpp
+     qpid/broker/windows/SaslAuthenticator.cpp
+@@ -938,7 +937,7 @@ if (NOT QPID_GENERATED_HEADERS_IN_SOURCE)
+ endif (NOT QPID_GENERATED_HEADERS_IN_SOURCE)
+ 
+ 
+-if (WIN32)
++if (_MSC_VER)
+     # Install the DtcPlugin project and call it qpidxarm.
+     set(AMQP_WCF_DIR ${qpid-cpp_SOURCE_DIR}/../wcf)
+     set(qpidxarm_SOURCES ${AMQP_WCF_DIR}/src/Apache/Qpid/DtcPlugin/DtcPlugin.cpp)
+@@ -951,7 +950,7 @@ if (WIN32)
+                  COMPONENT ${QPID_COMPONENT_CLIENT})
+         install_pdb (qpidxarm ${QPID_COMPONENT_CLIENT})
+     endif (EXISTS ${qpidxarm_SOURCES})
+-endif (WIN32)
++endif (_MSC_VER)
+ 
+ set (qpidbroker_SOURCES
+      ${mgen_broker_cpp}
+@@ -1083,7 +1082,7 @@ install (TARGETS qmf OPTIONAL
+          COMPONENT ${QPID_COMPONENT_QMF})
+ install_pdb (qmf ${QPID_COMPONENT_QMF})
+ 
+-if(NOT WIN32)
++#if(NOT WIN32)
+     set (qmf2_HEADERS
+         ../include/qmf/AgentEvent.h
+         ../include/qmf/Agent.h
+@@ -1158,7 +1157,7 @@ if(NOT WIN32)
+             DESTINATION ${QPID_INSTALL_INCLUDEDIR}/qmf
+             COMPONENT ${QPID_COMPONENT_QMF})
+     install_pdb (qmf2 ${QPID_COMPONENT_QMF})
+-endif (NOT WIN32)
++#endif (NOT WIN32)
+ 
+ set (qmfengine_SOURCES
+      qmf/engine/Agent.cpp
+diff --git a/qpid/cpp/src/qpid/amqp_0_10/SessionHandler.h b/qpid/cpp/src/qpid/amqp_0_10/SessionHandler.h
+index a87a1a1..b5b0fe5 100644
+--- a/qpid/cpp/src/qpid/amqp_0_10/SessionHandler.h
++++ b/qpid/cpp/src/qpid/amqp_0_10/SessionHandler.h
+@@ -41,8 +41,8 @@ namespace amqp_0_10 {
+  * to a session state.
+  */
+ 
+-class SessionHandler : public framing::AMQP_AllOperations::SessionHandler,
+-                       public framing::FrameHandler::InOutHandler
++class QPID_COMMON_CLASS_EXTERN SessionHandler : public framing::AMQP_AllOperations::SessionHandler,
++        public framing::FrameHandler::InOutHandler
+ {
+   public:
+     QPID_COMMON_EXTERN SessionHandler(framing::FrameHandler* out=0, uint16_t channel=0);
+diff --git a/qpid/cpp/src/qpid/broker/BrokerImportExport.h b/qpid/cpp/src/qpid/broker/BrokerImportExport.h
+index 4edf8c9..ee05788 100644
+--- a/qpid/cpp/src/qpid/broker/BrokerImportExport.h
++++ b/qpid/cpp/src/qpid/broker/BrokerImportExport.h
+@@ -20,14 +20,23 @@
+  * under the License.
+  */
+ 
+-#if defined(WIN32) && !defined(QPID_BROKER_STATIC)
+-#if defined(BROKER_EXPORT) || defined (qpidbroker_EXPORTS)
+-#define QPID_BROKER_EXTERN __declspec(dllexport)
++#if defined(WIN32) && !defined(QPID_DECLARE_STATIC)
++#  if defined(BROKER_EXPORT) || defined (qpidbroker_EXPORTS)
++#    define QPID_BROKER_EXTERN __declspec(dllexport)
++#  else
++#    define QPID_BROKER_EXTERN __declspec(dllimport)
++#  endif
++#  ifdef _MSC_VER
++#    define QPID_BROKER_CLASS_EXTERN
++#    define QPID_BROKER_INLINE_EXTERN QPID_BROKER_EXTERN
++#  else
++#    define QPID_BROKER_CLASS_EXTERN QPID_BROKER_EXTERN
++#    define QPID_BROKER_INLINE_EXTERN
++#  endif
+ #else
+-#define QPID_BROKER_EXTERN __declspec(dllimport)
+-#endif
+-#else
+-#define QPID_BROKER_EXTERN 
++#  define QPID_BROKER_EXTERN
++#  define QPID_BROKER_CLASS_EXTERN
++#  define QPID_BROKER_INLINE_EXTERN
+ #endif
+ 
+ #endif
+diff --git a/qpid/cpp/src/qpid/broker/DeliverableMessage.h b/qpid/cpp/src/qpid/broker/DeliverableMessage.h
+index ce613e7..c8d2100 100644
+--- a/qpid/cpp/src/qpid/broker/DeliverableMessage.h
++++ b/qpid/cpp/src/qpid/broker/DeliverableMessage.h
+@@ -29,7 +29,7 @@
+ 
+ namespace qpid {
+     namespace broker {
+-        class DeliverableMessage : public Deliverable{
++        class QPID_BROKER_CLASS_EXTERN DeliverableMessage : public Deliverable{
+             boost::intrusive_ptr<Message> msg;
+         public:
+             QPID_BROKER_EXTERN DeliverableMessage(const boost::intrusive_ptr<Message>& msg);
+diff --git a/qpid/cpp/src/qpid/broker/Exchange.h b/qpid/cpp/src/qpid/broker/Exchange.h
+index 9c4e6be..09f33a7 100644
+--- a/qpid/cpp/src/qpid/broker/Exchange.h
++++ b/qpid/cpp/src/qpid/broker/Exchange.h
+@@ -39,7 +39,7 @@ namespace broker {
+ class Broker;
+ class ExchangeRegistry;
+ 
+-class Exchange : public PersistableExchange, public management::Manageable {
++class QPID_BROKER_CLASS_EXTERN Exchange : public PersistableExchange, public management::Manageable {
+ public:
+     struct Binding : public management::Manageable {
+         typedef boost::shared_ptr<Binding>       shared_ptr;
+@@ -162,7 +162,7 @@ public:
+                                          Broker* broker = 0);
+     QPID_BROKER_EXTERN Exchange(const std::string& _name, bool _durable, const qpid::framing::FieldTable& _args,
+                                 management::Manageable* parent = 0, Broker* broker = 0);
+-    QPID_BROKER_EXTERN virtual ~Exchange();
++    QPID_BROKER_INLINE_EXTERN virtual ~Exchange();
+ 
+     const std::string& getName() const { return name; }
+     bool isDurable() { return durable; }
+diff --git a/qpid/cpp/src/qpid/broker/ExpiryPolicy.h b/qpid/cpp/src/qpid/broker/ExpiryPolicy.h
+index 40e793b..a723eb0 100644
+--- a/qpid/cpp/src/qpid/broker/ExpiryPolicy.h
++++ b/qpid/cpp/src/qpid/broker/ExpiryPolicy.h
+@@ -33,7 +33,7 @@ class Message;
+ /**
+  * Default expiry policy.
+  */
+-class ExpiryPolicy : public RefCounted
++class QPID_BROKER_CLASS_EXTERN ExpiryPolicy : public RefCounted
+ {
+   public:
+     QPID_BROKER_EXTERN virtual ~ExpiryPolicy();
+diff --git a/qpid/cpp/src/qpid/broker/MessageBuilder.h b/qpid/cpp/src/qpid/broker/MessageBuilder.h
+index 75dfd67..b99b8ef 100644
+--- a/qpid/cpp/src/qpid/broker/MessageBuilder.h
++++ b/qpid/cpp/src/qpid/broker/MessageBuilder.h
+@@ -33,7 +33,7 @@ namespace qpid {
+         class Message;
+         class MessageStore;
+ 
+-        class MessageBuilder : public framing::FrameHandler{
++        class QPID_BROKER_CLASS_EXTERN MessageBuilder : public framing::FrameHandler{
+         public:
+             QPID_BROKER_EXTERN MessageBuilder(MessageStore* const store);
+             QPID_BROKER_EXTERN void handle(framing::AMQFrame& frame);
+diff --git a/qpid/cpp/src/qpid/broker/NullMessageStore.h b/qpid/cpp/src/qpid/broker/NullMessageStore.h
+index e148ec4..a7453fa 100644
+--- a/qpid/cpp/src/qpid/broker/NullMessageStore.h
++++ b/qpid/cpp/src/qpid/broker/NullMessageStore.h
+@@ -34,7 +34,7 @@ namespace broker {
+ /**
+  * A null implementation of the MessageStore interface
+  */
+-class NullMessageStore : public MessageStore
++class QPID_BROKER_CLASS_EXTERN NullMessageStore : public MessageStore
+ {
+     std::set<std::string> prepared;
+     uint64_t nextPersistenceId;
+diff --git a/qpid/cpp/src/qpid/broker/PersistableMessage.h b/qpid/cpp/src/qpid/broker/PersistableMessage.h
+index e50b52c..d29c2c4 100644
+--- a/qpid/cpp/src/qpid/broker/PersistableMessage.h
++++ b/qpid/cpp/src/qpid/broker/PersistableMessage.h
+@@ -115,11 +115,11 @@ class PersistableMessage : public Persistable
+     virtual QPID_BROKER_EXTERN bool isPersistent() const = 0;
+ 
+     /** track the progress of a message received by the broker - see ingressCompletion above */
+-    QPID_BROKER_EXTERN bool isIngressComplete() { return ingressCompletion.isDone(); }
+-    QPID_BROKER_EXTERN AsyncCompletion& getIngressCompletion() { return ingressCompletion; }
++    QPID_BROKER_INLINE_EXTERN bool isIngressComplete() { return ingressCompletion.isDone(); }
++    QPID_BROKER_INLINE_EXTERN AsyncCompletion& getIngressCompletion() { return ingressCompletion; }
+ 
+-    QPID_BROKER_EXTERN void enqueueStart() { ingressCompletion.startCompleter(); }
+-    QPID_BROKER_EXTERN void enqueueComplete() { ingressCompletion.finishCompleter(); }
++    QPID_BROKER_INLINE_EXTERN void enqueueStart() { ingressCompletion.startCompleter(); }
++    QPID_BROKER_INLINE_EXTERN void enqueueComplete() { ingressCompletion.finishCompleter(); }
+ 
+     QPID_BROKER_EXTERN void enqueueAsync(PersistableQueue::shared_ptr queue,
+                                          MessageStore* _store);
+diff --git a/qpid/cpp/src/qpid/broker/QueueFlowLimit.h b/qpid/cpp/src/qpid/broker/QueueFlowLimit.h
+index 69d91df..6b9c54a 100644
+--- a/qpid/cpp/src/qpid/broker/QueueFlowLimit.h
++++ b/qpid/cpp/src/qpid/broker/QueueFlowLimit.h
+@@ -53,7 +53,7 @@ class Broker;
+  * passing _either_ level may turn flow control ON, but _both_ must be
+  * below level before flow control will be turned OFF.
+  */
+- class QueueFlowLimit : public QueueObserver
++ class QPID_BROKER_CLASS_EXTERN QueueFlowLimit : public QueueObserver
+ {
+     static uint64_t defaultMaxSize;
+     static uint defaultFlowStopRatio;
+diff --git a/qpid/cpp/src/qpid/broker/TopicExchange.h b/qpid/cpp/src/qpid/broker/TopicExchange.h
+index a6c457d..753c915 100644
+--- a/qpid/cpp/src/qpid/broker/TopicExchange.h
++++ b/qpid/cpp/src/qpid/broker/TopicExchange.h
+@@ -56,7 +56,7 @@ class TopicExchange : public virtual Exchange {
+     //    |   +-->d-->...
+     //    +-->x-->y-->...
+     //
+-    class BindingNode {
++    class QPID_BROKER_CLASS_EXTERN BindingNode {
+     public:
+ 
+         typedef boost::shared_ptr<BindingNode> shared_ptr;
+diff --git a/qpid/cpp/src/qpid/broker/TxPublish.h b/qpid/cpp/src/qpid/broker/TxPublish.h
+index effa585..f0b9c0a 100644
+--- a/qpid/cpp/src/qpid/broker/TxPublish.h
++++ b/qpid/cpp/src/qpid/broker/TxPublish.h
+@@ -45,7 +45,7 @@ namespace qpid {
+          * commit() the messages will be passed to the queue for
+          * dispatch or to be added to the in-memory queue.
+          */
+-        class TxPublish : public TxOp, public Deliverable{
++        class QPID_BROKER_CLASS_EXTERN TxPublish : public TxOp, public Deliverable{
+ 
+             class Commit{
+                 boost::intrusive_ptr<Message>& msg;
+diff --git a/qpid/cpp/src/qpid/broker/windows/BrokerDefaults.cpp b/qpid/cpp/src/qpid/broker/windows/BrokerDefaults.cpp
+index b6862f0..b65440b 100644
+--- a/qpid/cpp/src/qpid/broker/windows/BrokerDefaults.cpp
++++ b/qpid/cpp/src/qpid/broker/windows/BrokerDefaults.cpp
+@@ -31,10 +31,16 @@ const std::string Broker::Options::DEFAULT_DATA_DIR_NAME("\\QPIDD.DATA");
+ std::string
+ Broker::Options::getHome() {
+     std::string home;
++#ifdef _MSC_VER
+     char home_c[MAX_PATH+1];
+     size_t unused;
+     if (0 == getenv_s (&unused, home_c, sizeof(home_c), "HOME"))
+         home += home_c;
++#else
++    char *home_c = getenv("HOME");
++    if (home_c)
++        home += home_c;
++#endif
+     return home;
+ }
+ 
+diff --git a/qpid/cpp/src/qpid/broker/windows/SaslAuthenticator.cpp b/qpid/cpp/src/qpid/broker/windows/SaslAuthenticator.cpp
+index 608a8f7..962877a 100644
+--- a/qpid/cpp/src/qpid/broker/windows/SaslAuthenticator.cpp
++++ b/qpid/cpp/src/qpid/broker/windows/SaslAuthenticator.cpp
+@@ -159,8 +159,11 @@ void SspiAuthenticator::start(const string& mechanism, const string& response)
+     string::size_type j = response.find((char)0, i+1);
+     string uid = response.substr(i+1, j-1);
+     string pwd = response.substr(j+1);
++    string dot(".");
+     int error = 0;
+-    if (!LogonUser(uid.c_str(), ".", pwd.c_str(),
++    if (!LogonUser(const_cast<char*>(uid.c_str()),
++                   const_cast<char*>(dot.c_str()),
++                   const_cast<char*>(pwd.c_str()),
+                    LOGON32_LOGON_NETWORK,
+                    LOGON32_PROVIDER_DEFAULT,
+                    &userToken))
+@@ -176,7 +179,7 @@ void SspiAuthenticator::start(const string& mechanism, const string& response)
+     client.tune(framing::CHANNEL_MAX, connection.getFrameMax(), 0, 0);
+ }
+         
+-void SspiAuthenticator::step(const string& response)
++void SspiAuthenticator::step(const string& /*response*/)
+ {
+   QPID_LOG(info, "SASL: Need another step!!!");
+ }
+diff --git a/qpid/cpp/src/qpid/client/windows/SaslFactory.cpp b/qpid/cpp/src/qpid/client/windows/SaslFactory.cpp
+index 63c7fa3..d1ae762 100644
+--- a/qpid/cpp/src/qpid/client/windows/SaslFactory.cpp
++++ b/qpid/cpp/src/qpid/client/windows/SaslFactory.cpp
+@@ -153,7 +153,7 @@ std::string WindowsSasl::start(const std::string& mechanisms,
+     return resp;
+ }
+ 
+-std::string WindowsSasl::step(const std::string& challenge)
++std::string WindowsSasl::step(const std::string& /*challenge*/)
+ {
+     // Shouldn't get this for PLAIN...
+     throw InternalErrorException(QPID_MSG("Sasl step error"));
+@@ -169,7 +169,7 @@ std::string WindowsSasl::getUserId()
+     return std::string(); // TODO - when GSSAPI is supported, return userId for connection.
+ }
+ 
+-std::auto_ptr<SecurityLayer> WindowsSasl::getSecurityLayer(uint16_t maxFrameSize)
++std::auto_ptr<SecurityLayer> WindowsSasl::getSecurityLayer(uint16_t /*maxFrameSize*/)
+ {
+     return std::auto_ptr<SecurityLayer>(0);
+ }
+diff --git a/qpid/cpp/src/qpid/framing/AMQBody.h b/qpid/cpp/src/qpid/framing/AMQBody.h
+index 60ac2d3..56d1d25 100644
+--- a/qpid/cpp/src/qpid/framing/AMQBody.h
++++ b/qpid/cpp/src/qpid/framing/AMQBody.h
+@@ -46,7 +46,7 @@ struct AMQBodyConstVisitor {
+     virtual void visit(const AMQMethodBody&) = 0;
+ };
+ 
+-class AMQBody : public RefCounted {
++class QPID_COMMON_CLASS_EXTERN AMQBody : public RefCounted {
+   public:
+     AMQBody() {}
+     QPID_COMMON_EXTERN virtual ~AMQBody();
+diff --git a/qpid/cpp/src/qpid/framing/AMQContentBody.h b/qpid/cpp/src/qpid/framing/AMQContentBody.h
+index 69813b2..e25451e 100644
+--- a/qpid/cpp/src/qpid/framing/AMQContentBody.h
++++ b/qpid/cpp/src/qpid/framing/AMQContentBody.h
+@@ -29,7 +29,7 @@
+ namespace qpid {
+ namespace framing {
+ 
+-class AMQContentBody :  public AMQBody
++class QPID_COMMON_CLASS_EXTERN AMQContentBody :  public AMQBody
+ {
+     string data;
+ 
+@@ -37,15 +37,15 @@ public:
+     QPID_COMMON_EXTERN AMQContentBody();
+     QPID_COMMON_EXTERN AMQContentBody(const string& data);
+     inline virtual ~AMQContentBody(){}
+-    QPID_COMMON_EXTERN inline uint8_t type() const { return CONTENT_BODY; };
+-    QPID_COMMON_EXTERN inline const string& getData() const { return data; }
+-    QPID_COMMON_EXTERN inline string& getData() { return data; }
++    inline uint8_t type() const { return CONTENT_BODY; };
++    inline const string& getData() const { return data; }
++    inline string& getData() { return data; }
+     QPID_COMMON_EXTERN uint32_t encodedSize() const;
+     QPID_COMMON_EXTERN void encode(Buffer& buffer) const;
+     QPID_COMMON_EXTERN void decode(Buffer& buffer, uint32_t size);
+     QPID_COMMON_EXTERN void print(std::ostream& out) const;
+-    QPID_COMMON_EXTERN void accept(AMQBodyConstVisitor& v) const { v.visit(*this); }
+-    QPID_COMMON_EXTERN boost::intrusive_ptr<AMQBody> clone() const { return BodyFactory::copy(*this); }
++    void accept(AMQBodyConstVisitor& v) const { v.visit(*this); }
++    boost::intrusive_ptr<AMQBody> clone() const { return BodyFactory::copy(*this); }
+ };
+ 
+ }
+diff --git a/qpid/cpp/src/qpid/framing/AMQFrame.h b/qpid/cpp/src/qpid/framing/AMQFrame.h
+index d7b04f0..c669d12 100644
+--- a/qpid/cpp/src/qpid/framing/AMQFrame.h
++++ b/qpid/cpp/src/qpid/framing/AMQFrame.h
+@@ -33,7 +33,7 @@
+ namespace qpid {
+ namespace framing {
+ 
+-class AMQFrame : public AMQDataBlock
++class QPID_COMMON_CLASS_EXTERN AMQFrame : public AMQDataBlock
+ {
+   public:
+     QPID_COMMON_EXTERN AMQFrame(const boost::intrusive_ptr<AMQBody>& b=0);
+diff --git a/qpid/cpp/src/qpid/framing/AMQHeaderBody.h b/qpid/cpp/src/qpid/framing/AMQHeaderBody.h
+index 8d96e35..a8c3269 100644
+--- a/qpid/cpp/src/qpid/framing/AMQHeaderBody.h
++++ b/qpid/cpp/src/qpid/framing/AMQHeaderBody.h
+@@ -35,7 +35,7 @@
+ namespace qpid {
+ namespace framing {
+ 
+-class AMQHeaderBody :  public AMQBody
++class QPID_COMMON_CLASS_EXTERN AMQHeaderBody :  public AMQBody
+ {
+     template <class T> struct OptProps { boost::optional<T> props; };
+     template <class Base, class T>
+diff --git a/qpid/cpp/src/qpid/framing/AMQHeartbeatBody.h b/qpid/cpp/src/qpid/framing/AMQHeartbeatBody.h
+index 9b1fe8a..19ac2be 100644
+--- a/qpid/cpp/src/qpid/framing/AMQHeartbeatBody.h
++++ b/qpid/cpp/src/qpid/framing/AMQHeartbeatBody.h
+@@ -29,7 +29,7 @@
+ namespace qpid {
+ namespace framing {
+ 
+-class AMQHeartbeatBody :  public AMQBody
++class QPID_COMMON_CLASS_EXTERN AMQHeartbeatBody :  public AMQBody
+ {
+ public:
+     QPID_COMMON_EXTERN virtual ~AMQHeartbeatBody();
+diff --git a/qpid/cpp/src/qpid/framing/TransferContent.h b/qpid/cpp/src/qpid/framing/TransferContent.h
+index 5fe1a51..9a698a1 100644
+--- a/qpid/cpp/src/qpid/framing/TransferContent.h
++++ b/qpid/cpp/src/qpid/framing/TransferContent.h
+@@ -32,7 +32,7 @@ namespace qpid {
+ namespace framing {
+ 
+ /** Message content */
+-class TransferContent : public MethodContent
++class QPID_COMMON_CLASS_EXTERN TransferContent : public MethodContent
+ {
+     AMQHeaderBody header;
+     std::string data;
+diff --git a/qpid/cpp/src/qpid/log/windows/SinkOptions.cpp b/qpid/cpp/src/qpid/log/windows/SinkOptions.cpp
+index 28f4b26..0c74bea 100644
+--- a/qpid/cpp/src/qpid/log/windows/SinkOptions.cpp
++++ b/qpid/cpp/src/qpid/log/windows/SinkOptions.cpp
+@@ -53,7 +53,7 @@ static int eventTypes[qpid::log::LevelTraits::COUNT] = {
+ 
+ class EventLogOutput : public qpid::log::Logger::Output {
+ public:
+-    EventLogOutput(const std::string& sourceName) : logHandle(0)
++    EventLogOutput(const std::string& /*sourceName*/) : logHandle(0)
+     {
+         logHandle = OpenEventLog(0, "Application");
+     }
+@@ -83,7 +83,7 @@ private:
+     HANDLE logHandle;
+ };
+ 
+-SinkOptions::SinkOptions(const std::string& argv0)
++SinkOptions::SinkOptions(const std::string& /*argv0*/)
+     : qpid::log::SinkOptions(),
+       logToStderr(true),
+       logToStdout(false),
+diff --git a/qpid/cpp/src/qpid/log/windows/SinkOptions.h b/qpid/cpp/src/qpid/log/windows/SinkOptions.h
+index 605822f..f270c50 100644
+--- a/qpid/cpp/src/qpid/log/windows/SinkOptions.h
++++ b/qpid/cpp/src/qpid/log/windows/SinkOptions.h
+@@ -26,7 +26,7 @@ namespace qpid {
+ namespace log {
+ namespace windows {
+ 
+-struct SinkOptions : public qpid::log::SinkOptions {
++struct QPID_COMMON_CLASS_EXTERN SinkOptions : public qpid::log::SinkOptions {
+     QPID_COMMON_EXTERN SinkOptions(const std::string& argv0);
+     virtual ~SinkOptions() {}
+ 
+diff --git a/qpid/cpp/src/qpid/messaging/AddressParser.h b/qpid/cpp/src/qpid/messaging/AddressParser.h
+index 1635331..c51200c 100644
+--- a/qpid/cpp/src/qpid/messaging/AddressParser.h
++++ b/qpid/cpp/src/qpid/messaging/AddressParser.h
+@@ -26,13 +26,13 @@
+ namespace qpid {
+ namespace messaging {
+ 
+-class AddressParser
++class QPID_MESSAGING_CLASS_EXTERN AddressParser
+ {
+   public:
+-    AddressParser(const std::string&);
+-    bool parse(Address& address);
+-    bool parseMap(qpid::types::Variant::Map& map);
+-    bool parseList(qpid::types::Variant::List& list);
++    QPID_MESSAGING_EXTERN AddressParser(const std::string&);
++    QPID_MESSAGING_EXTERN bool parse(Address& address);
++    QPID_MESSAGING_EXTERN bool parseMap(qpid::types::Variant::Map& map);
++    QPID_MESSAGING_EXTERN bool parseList(qpid::types::Variant::List& list);
+   private:
+     const std::string& input;
+     std::string::size_type current;
+diff --git a/qpid/cpp/src/qpid/sys/AggregateOutput.h b/qpid/cpp/src/qpid/sys/AggregateOutput.h
+index 6dad998..d7c0ff2 100644
+--- a/qpid/cpp/src/qpid/sys/AggregateOutput.h
++++ b/qpid/cpp/src/qpid/sys/AggregateOutput.h
+@@ -41,7 +41,7 @@ namespace sys {
+  * doOutput is called in another.
+  */
+ 
+-class AggregateOutput : public OutputTask, public OutputControl
++class QPID_COMMON_CLASS_EXTERN AggregateOutput : public OutputTask, public OutputControl
+ {
+     typedef std::deque<OutputTask*> TaskList;
+ 
+diff --git a/qpid/cpp/src/qpid/sys/AsynchIOHandler.h b/qpid/cpp/src/qpid/sys/AsynchIOHandler.h
+index e1885ba..b986760 100644
+--- a/qpid/cpp/src/qpid/sys/AsynchIOHandler.h
++++ b/qpid/cpp/src/qpid/sys/AsynchIOHandler.h
+@@ -57,7 +57,7 @@ class AsynchIOHandler : public OutputControl {
+     QPID_COMMON_EXTERN ~AsynchIOHandler();
+     QPID_COMMON_EXTERN void init(AsynchIO* a, int numBuffs);
+ 
+-    QPID_COMMON_EXTERN void setClient() { isClient = true; }
++    QPID_COMMON_INLINE_EXTERN void setClient() { isClient = true; }
+ 
+     // Output side
+     QPID_COMMON_EXTERN void abort();
+diff --git a/qpid/cpp/src/qpid/sys/ClusterSafe.h b/qpid/cpp/src/qpid/sys/ClusterSafe.h
+index 27e4eb4..434e0a5 100644
+--- a/qpid/cpp/src/qpid/sys/ClusterSafe.h
++++ b/qpid/cpp/src/qpid/sys/ClusterSafe.h
+@@ -56,10 +56,10 @@ QPID_COMMON_EXTERN bool isClusterSafe();
+  *  Mark a scope as cluster safe. Sets isClusterSafe in constructor and resets
+  *  to previous value in destructor.
+  */
+-class ClusterSafeScope {
++class QPID_COMMON_CLASS_EXTERN ClusterSafeScope {
+   public:
+-    ClusterSafeScope();
+-    ~ClusterSafeScope();
++    QPID_COMMON_EXTERN ClusterSafeScope();
++    QPID_COMMON_EXTERN ~ClusterSafeScope();
+   private:
+     bool save;
+ };
+@@ -68,7 +68,7 @@ class ClusterSafeScope {
+  *  Mark a scope as cluster unsafe. Clears isClusterSafe in constructor and resets
+  *  to previous value in destructor.
+  */
+-class ClusterUnsafeScope {
++class QPID_COMMON_CLASS_EXTERN ClusterUnsafeScope {
+   public:
+     QPID_COMMON_EXTERN ClusterUnsafeScope();
+     QPID_COMMON_EXTERN ~ClusterUnsafeScope();
+diff --git a/qpid/cpp/src/qpid/sys/Poller.h b/qpid/cpp/src/qpid/sys/Poller.h
+index ec53b79..01ee139 100644
+--- a/qpid/cpp/src/qpid/sys/Poller.h
++++ b/qpid/cpp/src/qpid/sys/Poller.h
+@@ -120,7 +120,7 @@ class PollerHandle {
+     friend struct Poller::Event;
+ 
+     PollerHandlePrivate* const impl;
+-    QPID_COMMON_EXTERN virtual void processEvent(Poller::EventType) {};
++    QPID_COMMON_INLINE_EXTERN virtual void processEvent(Poller::EventType) {};
+ 
+ public:
+     QPID_COMMON_EXTERN PollerHandle(const IOHandle& h);
+diff --git a/qpid/cpp/src/qpid/sys/Socket.h b/qpid/cpp/src/qpid/sys/Socket.h
+index 7d50afc..b1cded1 100644
+--- a/qpid/cpp/src/qpid/sys/Socket.h
++++ b/qpid/cpp/src/qpid/sys/Socket.h
+@@ -33,7 +33,7 @@ namespace sys {
+ class Duration;
+ class SocketAddress;
+ 
+-class Socket : public IOHandle
++class QPID_COMMON_CLASS_EXTERN Socket : public IOHandle
+ {
+ public:
+     /** Create a socket wrapper for descriptor. */
+@@ -84,7 +84,7 @@ public:
+     /**
+      * Returns the full address of the connection: local and remote host and port.
+      */
+-    QPID_COMMON_EXTERN std::string getFullAddress() const { return getLocalAddress()+"-"+getPeerAddress(); }
++    QPID_COMMON_INLINE_EXTERN std::string getFullAddress() const { return getLocalAddress()+"-"+getPeerAddress(); }
+ 
+     QPID_COMMON_EXTERN uint16_t getLocalPort() const;
+     uint16_t getRemotePort() const;
+diff --git a/qpid/cpp/src/qpid/sys/alloca.h b/qpid/cpp/src/qpid/sys/alloca.h
+index e989670..0f58920 100644
+--- a/qpid/cpp/src/qpid/sys/alloca.h
++++ b/qpid/cpp/src/qpid/sys/alloca.h
+@@ -21,19 +21,22 @@
+  *
+  */
+ 
+-#if (defined(_WINDOWS) || defined (WIN32)) && defined(_MSC_VER)
+-#include <malloc.h>
+-#ifdef alloc
+-#  undef alloc
+-#endif
+-#define alloc _alloc
+-#ifdef alloca
+-#  undef alloca
+-#endif
+-#define alloca _alloca
+-#endif
+-#if !defined _WINDOWS && !defined WIN32
+-#include <alloca.h>
++#if (defined(_WINDOWS) || defined (WIN32))
++#  include <malloc.h>
++
++#  if defined(_MSC_VER)
++#    ifdef alloc
++#      undef alloc
++#    endif
++#    define alloc _alloc
++#    ifdef alloca
++#      undef alloca
++#    endif
++#    define alloca _alloca
++#  endif
++#  if !defined _WINDOWS && !defined WIN32
++#    include <alloca.h>
++#  endif
+ #endif
+ 
+ #endif  /*!QPID_SYS_ALLOCA_H*/
+diff --git a/qpid/cpp/src/qpid/sys/windows/AsynchIO.cpp b/qpid/cpp/src/qpid/sys/windows/AsynchIO.cpp
+index 38d8842..e1d8f52 100644
+--- a/qpid/cpp/src/qpid/sys/windows/AsynchIO.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/AsynchIO.cpp
+@@ -37,12 +37,12 @@
+ #include <winsock2.h>
+ #include <mswsock.h>
+ #include <windows.h>
+-
++#include "mingw32_compat.h"
+ #include <boost/bind.hpp>
+ 
+ namespace {
+ 
+-    typedef qpid::sys::ScopedLock<qpid::sys::Mutex>  QLock;
++typedef qpid::sys::ScopedLock<qpid::sys::Mutex>  QLock;
+ 
+ /*
+  * The function pointers for AcceptEx and ConnectEx need to be looked up
+@@ -114,7 +114,8 @@ AsynchAcceptor::~AsynchAcceptor()
+ }
+ 
+ void AsynchAcceptor::start(Poller::shared_ptr poller) {
+-    poller->monitorHandle(PollerHandle(socket), Poller::INPUT);
++    PollerHandle ph = PollerHandle(socket);
++    poller->monitorHandle(ph, Poller::INPUT);
+     restart ();
+ }
+ 
+@@ -154,7 +155,7 @@ void AsynchAcceptResult::success(size_t /*bytesTransferred*/) {
+     delete this;
+ }
+ 
+-void AsynchAcceptResult::failure(int status) {
++void AsynchAcceptResult::failure(int /*status*/) {
+     //if (status != WSA_OPERATION_ABORTED)
+     // Can there be anything else?  ;
+     delete this;
+@@ -410,8 +411,9 @@ void AsynchIO::queueForDeletion() {
+ }
+ 
+ void AsynchIO::start(Poller::shared_ptr poller0) {
++    PollerHandle ph = PollerHandle(socket);
+     poller = poller0;
+-    poller->monitorHandle(PollerHandle(socket), Poller::INPUT);
++    poller->monitorHandle(ph, Poller::INPUT);
+     if (writeQueue.size() > 0)  // Already have data queued for write
+         notifyPendingWrite();
+     startReading();
+@@ -584,7 +586,6 @@ void AsynchIO::notifyIdle(void) {
+ void AsynchIO::startWrite(AsynchIO::BufferBase* buff) {
+     writeInProgress = true;
+     InterlockedIncrement(&opsInProgress);
+-    int writeCount = buff->byteCount-buff->dataCount;
+     AsynchWriteResult *result =
+         new AsynchWriteResult(boost::bind(&AsynchIO::completion, this, _1),
+                               buff,
+diff --git a/qpid/cpp/src/qpid/sys/windows/AsynchIoResult.h b/qpid/cpp/src/qpid/sys/windows/AsynchIoResult.h
+index 66c89ef..b113249 100755
+--- a/qpid/cpp/src/qpid/sys/windows/AsynchIoResult.h
++++ b/qpid/cpp/src/qpid/sys/windows/AsynchIoResult.h
+@@ -98,7 +98,7 @@ private:
+     // AcceptEx needs a place to write the local and remote addresses
+     // when accepting the connection. Place those here; get enough for
+     // IPv6 addresses, even if the socket is IPv4.
+-    enum { SOCKADDRMAXLEN = sizeof sockaddr_in6 + 16,
++    enum { SOCKADDRMAXLEN = sizeof(sockaddr_in6) + 16,
+            SOCKADDRBUFLEN = 2 * SOCKADDRMAXLEN };
+     char addressBuffer[SOCKADDRBUFLEN];
+ };
+diff --git a/qpid/cpp/src/qpid/sys/windows/IocpPoller.cpp b/qpid/cpp/src/qpid/sys/windows/IocpPoller.cpp
+index d326ab0..1805dd2 100755
+--- a/qpid/cpp/src/qpid/sys/windows/IocpPoller.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/IocpPoller.cpp
+@@ -152,9 +152,9 @@ void Poller::monitorHandle(PollerHandle& handle, Direction dir) {
+ }
+ 
+ // All no-ops...
+-void Poller::unmonitorHandle(PollerHandle& handle, Direction dir) {}
+-void Poller::registerHandle(PollerHandle& handle) {}
+-void Poller::unregisterHandle(PollerHandle& handle) {}
++void Poller::unmonitorHandle(PollerHandle& /*handle*/, Direction /*dir*/) {}
++void Poller::registerHandle(PollerHandle& /*handle*/) {}
++void Poller::unregisterHandle(PollerHandle& /*handle*/) {}
+ 
+ Poller::Event Poller::wait(Duration timeout) {
+     DWORD timeoutMs = 0;
+diff --git a/qpid/cpp/src/qpid/sys/windows/Shlib.cpp b/qpid/cpp/src/qpid/sys/windows/Shlib.cpp
+index 38027de..ba18747 100644
+--- a/qpid/cpp/src/qpid/sys/windows/Shlib.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/Shlib.cpp
+@@ -44,7 +44,8 @@ void  Shlib::unload() {
+ }
+ 
+ void*  Shlib::getSymbol(const char* name) {
+-    void* sym = GetProcAddress(static_cast<HMODULE>(handle), name);
++    // Double cast avoids warning about casting function pointer to object
++    void *sym = reinterpret_cast<void*>(reinterpret_cast<intptr_t>(GetProcAddress(static_cast<HMODULE>(handle), name)));
+     if (sym == NULL)
+         throw QPID_WINDOWS_ERROR(GetLastError());
+     return sym;
+diff --git a/qpid/cpp/src/qpid/sys/windows/Socket.cpp b/qpid/cpp/src/qpid/sys/windows/Socket.cpp
+index 11fb8b4..2ce274a 100755
+--- a/qpid/cpp/src/qpid/sys/windows/Socket.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/Socket.cpp
+@@ -19,6 +19,11 @@
+  *
+  */
+ 
++// Ensure we get all of winsock2.h
++#ifndef _WIN32_WINNT
++#define _WIN32_WINNT 0x0501
++#endif
++
+ #include "qpid/sys/Socket.h"
+ #include "qpid/sys/SocketAddress.h"
+ #include "qpid/sys/windows/IoHandlePrivate.h"
+diff --git a/qpid/cpp/src/qpid/sys/windows/SocketAddress.cpp b/qpid/cpp/src/qpid/sys/windows/SocketAddress.cpp
+index 501cff1..5efdad0 100644
+--- a/qpid/cpp/src/qpid/sys/windows/SocketAddress.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/SocketAddress.cpp
+@@ -19,6 +19,11 @@
+  *
+  */
+ 
++// Ensure we get all of winsock2.h
++#ifndef _WIN32_WINNT
++#define _WIN32_WINNT 0x0501
++#endif
++
+ #include "qpid/sys/SocketAddress.h"
+ 
+ #include "qpid/sys/windows/check.h"
+diff --git a/qpid/cpp/src/qpid/sys/windows/StrError.cpp b/qpid/cpp/src/qpid/sys/windows/StrError.cpp
+index 9c1bfcd..546d399 100755
+--- a/qpid/cpp/src/qpid/sys/windows/StrError.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/StrError.cpp
+@@ -30,6 +30,7 @@ namespace sys {
+ std::string strError(int err) {
+     const size_t bufsize = 512;
+     char buf[bufsize];
++    buf[0] = 0;
+     if (0 == FormatMessage (FORMAT_MESSAGE_MAX_WIDTH_MASK
+                             | FORMAT_MESSAGE_FROM_SYSTEM,
+                             0,
+@@ -39,7 +40,11 @@ std::string strError(int err) {
+                             bufsize,
+                             0))
+     {
+-        strerror_s (buf, bufsize, err);
++#ifdef _MSC_VER
++        strerror_s(buf, bufsize, err);
++#else
++        return std::string(strerror(err));
++#endif
+     }
+     return std::string(buf);
+ }
+diff --git a/qpid/cpp/src/qpid/sys/windows/Time.cpp b/qpid/cpp/src/qpid/sys/windows/Time.cpp
+index 16d09fc..1e03d78 100644
+--- a/qpid/cpp/src/qpid/sys/windows/Time.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/Time.cpp
+@@ -91,7 +91,11 @@ void outputFormattedNow(std::ostream& o) {
+     char time_string[100];
+ 
+     ::time( &rawtime );
++#ifdef _MSC_VER
+     ::localtime_s(&timeinfo, &rawtime);
++#else
++    timeinfo = *(::localtime(&rawtime));
++#endif
+     ::strftime(time_string, 100,
+                "%Y-%m-%d %H:%M:%S",
+                &timeinfo);
+diff --git a/qpid/cpp/src/qpid/sys/windows/mingw32_compat.h b/qpid/cpp/src/qpid/sys/windows/mingw32_compat.h
+new file mode 100644
+index 0000000..51f613c
+--- /dev/null
++++ b/qpid/cpp/src/qpid/sys/windows/mingw32_compat.h
+@@ -0,0 +1,39 @@
++#ifndef _sys_windows_mingw32_compat
++#define _sys_windows_mingw32_compat
++/*
++ *
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ * 
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ * 
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied.  See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ *
++ */
++
++#ifdef WIN32
++#ifndef _MSC_VER
++
++//
++// The following definitions for extension function GUIDs and signatures are taken from
++// MswSock.h in the Windows32 SDK.  These rightfully belong in the mingw32 version of
++// mswsock.h, but are not included presently.
++//
++
++#define WSAID_ACCEPTEX {0xb5367df1,0xcbac,0x11cf,{0x95,0xca,0x00,0x80,0x5f,0x48,0xa1,0x92}}
++typedef BOOL (PASCAL *LPFN_ACCEPTEX)(SOCKET,SOCKET,PVOID,DWORD,DWORD,DWORD,LPDWORD,LPOVERLAPPED);
++
++#endif
++#endif
++
++#endif
+diff --git a/qpid/cpp/src/qpid/sys/windows/uuid.cpp b/qpid/cpp/src/qpid/sys/windows/uuid.cpp
+index b536062..3316ecb 100644
+--- a/qpid/cpp/src/qpid/sys/windows/uuid.cpp
++++ b/qpid/cpp/src/qpid/sys/windows/uuid.cpp
+@@ -19,7 +19,7 @@
+  *
+  */
+ 
+-#include <Rpc.h>
++#include <rpc.h>
+ #ifdef uuid_t   /*  Done in rpcdce.h */
+ #  undef uuid_t
+ #endif
+@@ -52,7 +52,11 @@ int uuid_parse (const char *in, uuid_t uu) {
+ void uuid_unparse (const uuid_t uu, char *out) {
+     unsigned char *formatted;
+     if (UuidToString((UUID*)uu, &formatted) == RPC_S_OK) {
++#ifdef _MSC_VER
+         strncpy_s (out, 36+1, (char*)formatted, _TRUNCATE);
++#else
++        strncpy (out, (char*)formatted, 36+1);
++#endif
+         RpcStringFree(&formatted);
+     }
+ }
+diff --git a/qpid/cpp/src/qpid/types/Variant.cpp b/qpid/cpp/src/qpid/types/Variant.cpp
+index 30d7ff1..e425098 100644
+--- a/qpid/cpp/src/qpid/types/Variant.cpp
++++ b/qpid/cpp/src/qpid/types/Variant.cpp
+@@ -369,11 +369,11 @@ int8_t VariantImpl::asInt8() const
+               return int8_t(value.ui16);
+           break;
+       case VAR_UINT32:
+-          if (value.ui32 <= (uint) std::numeric_limits<int8_t>::max())
++          if (value.ui32 <= (uint32_t) std::numeric_limits<int8_t>::max())
+               return int8_t(value.ui32);
+           break;
+       case VAR_UINT64:
+-          if (value.ui64 <= (uint) std::numeric_limits<int8_t>::max())
++          if (value.ui64 <= (uint64_t) std::numeric_limits<int8_t>::max())
+               return int8_t(value.ui64);
+           break;
+       case VAR_STRING: return convertFromString<int8_t>();
+@@ -400,11 +400,11 @@ int16_t VariantImpl::asInt16() const
+               return int16_t(value.ui16);
+           break;
+       case VAR_UINT32:
+-          if (value.ui32 <= (uint) std::numeric_limits<int16_t>::max())
++          if (value.ui32 <= (uint32_t) std::numeric_limits<int16_t>::max())
+               return int16_t(value.ui32);
+           break;
+       case VAR_UINT64:
+-          if (value.ui64 <= (uint) std::numeric_limits<int16_t>::max())
++          if (value.ui64 <= (uint64_t) std::numeric_limits<int16_t>::max())
+               return int16_t(value.ui64);
+           break;
+       case VAR_STRING: return convertFromString<int16_t>();
+@@ -429,7 +429,7 @@ int32_t VariantImpl::asInt32() const
+               return int32_t(value.ui32);
+           break;
+       case VAR_UINT64:
+-        if (value.ui64 <= (uint32_t) std::numeric_limits<int32_t>::max())
++        if (value.ui64 <= (uint64_t) std::numeric_limits<int32_t>::max())
+               return int32_t(value.ui64);
+           break;
+       case VAR_STRING: return convertFromString<int32_t>();
+diff --git a/qpid/cpp/src/tests/TimerTest.cpp b/qpid/cpp/src/tests/TimerTest.cpp
+index 7df9416..6a0a196 100644
+--- a/qpid/cpp/src/tests/TimerTest.cpp
++++ b/qpid/cpp/src/tests/TimerTest.cpp
+@@ -77,8 +77,10 @@ class TestTask : public TimerTask
+         BOOST_CHECK(fired);
+         BOOST_CHECK_EQUAL(expected_position, position);
+         Duration actual(start, end);
+-#ifdef _WIN32
++#ifdef _MSC_VER
+         uint64_t difference = _abs64(expected - actual);
++#elif defined(_WIN32)
++        uint64_t difference = labs(expected - actual);
+ #else
+         uint64_t difference = abs(expected - actual);
+ #endif
+diff --git a/qpid/cpp/src/tests/windows/DisableWin32ErrorWindows.cpp b/qpid/cpp/src/tests/windows/DisableWin32ErrorWindows.cpp
+index a0b665d..024f20b 100644
+--- a/qpid/cpp/src/tests/windows/DisableWin32ErrorWindows.cpp
++++ b/qpid/cpp/src/tests/windows/DisableWin32ErrorWindows.cpp
+@@ -26,7 +26,9 @@
+ // include this file with the executable being built. If the default
+ // behaviors are desired, don't include this file in the build.
+ 
++#if defined(_MSC_VER)
+ #include <crtdbg.h>
++#endif
+ #include <windows.h>
+ #include <iostream>
+ 
+@@ -53,12 +55,14 @@ static redirect_errors_to_stderr block;
+ 
+ redirect_errors_to_stderr::redirect_errors_to_stderr()
+ {
++#if defined(_MSC_VER)
+     _CrtSetReportMode (_CRT_WARN, _CRTDBG_MODE_FILE);
+     _CrtSetReportFile (_CRT_WARN, _CRTDBG_FILE_STDERR);
+     _CrtSetReportMode (_CRT_ERROR, _CRTDBG_MODE_FILE);
+     _CrtSetReportFile (_CRT_ERROR, _CRTDBG_FILE_STDERR);
+     _CrtSetReportMode (_CRT_ASSERT, _CRTDBG_MODE_FILE);
+     _CrtSetReportFile (_CRT_ASSERT, _CRTDBG_FILE_STDERR);
++#endif
+ 
+     // Prevent the system from displaying the critical-error-handler
+     // and can't-open-file message boxes.
+diff --git a/qpid/cpp/src/windows/QpiddBroker.cpp b/qpid/cpp/src/windows/QpiddBroker.cpp
+index e221551..50bb459 100644
+--- a/qpid/cpp/src/windows/QpiddBroker.cpp
++++ b/qpid/cpp/src/windows/QpiddBroker.cpp
+@@ -155,7 +155,7 @@ NamedSharedMemory<T>::NamedSharedMemory(const std::string& n) :
+     name(n),
+     memory(NULL),
+     data(0)
+-{};
++{}
+ 
+ template <typename T>
+ NamedSharedMemory<T>::~NamedSharedMemory() {
+@@ -163,7 +163,7 @@ NamedSharedMemory<T>::~NamedSharedMemory() {
+         ::UnmapViewOfFile(data);
+     if (memory != NULL)
+         ::CloseHandle(memory);
+-};
++}
+ 
+ template <typename T>
+ T& NamedSharedMemory<T>::create() {

@@ -1,0 +1,726 @@
+diff --git a/qpid/cpp/docs/man/Makefile.am b/qpid/cpp/docs/man/Makefile.am
+index 14295f7..b821568 100644
+--- a/qpid/cpp/docs/man/Makefile.am
++++ b/qpid/cpp/docs/man/Makefile.am
+@@ -16,10 +16,29 @@
+ # specific language governing permissions and limitations
+ # under the License.
+ #
++
++# Generate makefile from qpidd --help
++#
++# Note: qiddd.1 is normally a _checked in_ pre-generated file, so that
++# make dist does not have to build the entire source just for the man page.
++#
++# To update the checked-in file (e.g. for a new release) do the following:
++#
++# - start with a completely clean checkout.
++# - make sure there are no modules installed in your configured prefix,
++#   we don't want to pick up configuration from optional modules
++# - do bootstrap; configure
++# - in build-dir: cd src; make # build the broker
++# - in source-dir: cd docs/man; rm qpidd.1 # remove checked-in man page.
++# - in build-dir: cd docs/man; make # make new man page
++# - edit qpidd.1 to remove all default values referring to file/directory locations.
++#   these values will differ between builds depending on configuration.
++# - if source-dir != build-dir: copy qpidd.1 from build-dir/docs/man to source-dir/docs/man
++
+ dist_man_MANS = qpidd.1
+ 
+-man_aux = $(dist_man_MANS:.1=.x) 
+-EXTRA_DIST = $(man_aux) generate_manpage groffify_options.sed groffify_template.sed 
++man_aux = $(dist_man_MANS:.1=.x)
++EXTRA_DIST = $(man_aux) generate_manpage groffify_options.sed groffify_template.sed
+ DISTCLEANFILES = $(dist_man_MANS)
+ CLEANFILES=qpidd.1
+ 
+diff --git a/qpid/cpp/docs/man/qpidd.1 b/qpid/cpp/docs/man/qpidd.1
+new file mode 100644
+index 0000000..48b73b3
+--- /dev/null
++++ b/qpid/cpp/docs/man/qpidd.1
+@@ -0,0 +1,292 @@
++.TH QPIDD "1" "March 2011" "qpidd (qpidc) version 0.11" "User Commands"
++.SH NAME
++
++qpidd \- the Qpid AMQP Message Broker Daemon
++
++.SH SYNOPSIS
++
++qpidd [-p port] [--config config_file] [--data-dir directory]
++
++.SH DESCRIPTION
++
++An AMQP message broker daemon that stores, routes and forwards
++messages using the Advanced Message Queueing Protocol (AMQP).
++
++.SH OPTIONS
++
++The options below are built-in to qpidd. Installing add-on modules provides additional options. To see the full set of options available type "qpidd --help"
++
++Options may be specified via command line, environment variable or configuration file. See FILES and ENVIRONMENT below for details.
++
++.PP
++
++.SS Options
++
++.TP
++\-h [ \-\-help ]
++Displays the
++help message
++.TP
++\-v [ \-\-version ]
++Displays version
++information
++.TP
++\-\-config FILE
++Reads configurat
++ion from FILE
++
++.SS Module options
++.TP
++\-\-module\-dir DIR
++Load all
++shareable
++modules in
++this directo
++ry
++.TP
++\-\-load\-module FILE
++Specifies
++additional
++module(s) to
++be loaded
++.TP
++\-\-no\-module\-dir
++Don't load
++modules from
++module
++directory
++
++.SS Broker Options
++.TP
++\-\-data\-dir DIR
++Directory to contain
++persistent data generated
++by the broker
++.TP
++\-\-no\-data\-dir
++Don't use a data
++directory.  No persistent
++configuration will be
++loaded or stored
++.TP
++\-p [ \-\-port ] PORT (5672)
++Tells the broker to
++listen on PORT
++.TP
++\-\-worker\-threads N (9)
++Sets the broker thread
++pool size
++.TP
++\-\-max\-connections N (500)
++Sets the maximum allowed
++connections
++.TP
++\-\-connection\-backlog N (10)
++Sets the connection
++backlog limit for the
++server socket
++.TP
++\-m [ \-\-mgmt\-enable ] yes|no (1)
++Enable Management
++.TP
++\-\-mgmt\-qmf2 yes|no (1)
++Enable broadcast of
++management information
++over QMF v2
++.TP
++\-\-mgmt\-qmf1 yes|no (1)
++Enable broadcast of
++management information
++over QMF v1
++.TP
++\-\-mgmt\-pub\-interval SECONDS (10)
++Management Publish
++Interval
++.TP
++\-\-queue\-purge\-interval SECONDS (600)
++Interval between attempts
++to purge any expired
++messages from queues
++.TP
++\-\-auth yes|no (1)
++Enable authentication, if
++disabled all incoming
++connections will be
++trusted
++.TP
++\-\-realm REALM (QPID)
++Use the given realm when
++performing authentication
++.TP
++\-\-default\-queue\-limit BYTES (104857600)
++Default maximum size for
++queues (in bytes)
++.TP
++\-\-tcp\-nodelay
++Set TCP_NODELAY on TCP
++connections
++.TP
++\-\-require\-encryption
++Only accept connections
++that are encrypted
++\-\-known\-hosts\-url URL or \&'none'                     URL to send as
++\&'known\-hosts' to clients
++(\&'none' implies empty
++list)
++.TP
++\-\-sasl\-config DIR
++gets sasl config info
++from nonstandard location
++.TP
++\-\-max\-session\-rate MESSAGES/S (0)
++Sets the maximum message
++rate per session
++(0=unlimited)
++.TP
++\-\-async\-queue\-events yes|no (0)
++Set Queue Events async,
++used for services like
++replication
++.TP
++\-\-default\-flow\-stop\-threshold %MESSAGES (80)
++Queue capacity level at
++which flow control is
++activated.
++.TP
++\-\-default\-flow\-resume\-threshold %MESSAGES (70)
++Queue capacity level at
++which flow control is
++de\-activated.
++.TP
++\-\-default\-event\-threshold\-ratio %age of limit (80)
++The ratio of any
++specified queue limit at
++which an event will be
++raised
++
++.SS Logging options
++.TP
++\-t [ \-\-trace ]
++Enables all logging
++.TP
++\-\-log\-enable RULE (notice+)
++Enables logging for selected levels
++and components. RULE is in the form
++\&'LEVEL[+][:PATTERN]' Levels are one
++of:
++trace debug info notice warning
++error critical
++For example:
++\&'\-\-log\-enable warning+' logs all
++warning, error and critical messages.
++\&'\-\-log\-enable debug:framing' logs
++debug messages from the framing
++namespace. This option can be used
++multiple times
++.TP
++\-\-log\-time yes|no (1)
++Include time in log messages
++.TP
++\-\-log\-level yes|no (1)
++Include severity level in log
++messages
++.TP
++\-\-log\-source yes|no (0)
++Include source file:line in log
++messages
++.TP
++\-\-log\-thread yes|no (0)
++Include thread ID in log messages
++.TP
++\-\-log\-function yes|no (0)
++Include function signature in log
++messages
++.TP
++\-\-log\-prefix STRING
++Prefix to append to all log messages
++
++.SS Logging sink options
++.TP
++\-\-log\-to\-stderr yes|no (1)
++Send logging output to stderr
++.TP
++\-\-log\-to\-stdout yes|no (0)
++Send logging output to stdout
++.TP
++\-\-log\-to\-file FILE
++Send log output to FILE.
++.TP
++\-\-log\-to\-syslog yes|no (0)
++Send logging output to syslog;
++customize using \-\-syslog\-name and
++\-\-syslog\-facility
++.TP
++\-\-syslog\-name NAME (lt\-qpidd)
++Name to use in syslog messages
++.TP
++\-\-syslog\-facility LOG_XXX (LOG_DAEMON)
++Facility to use in syslog messages
++
++.SS Daemon options
++.TP
++\-d [ \-\-daemon ]
++Run as a daemon. Logs to syslog
++by default in this mode.
++.TP
++\-\-transport TRANSPORT (tcp)
++The transport for which to
++return the port
++.TP
++\-\-pid\-dir DIR
++Directory where port\-specific
++PID file is stored
++.TP
++\-w [ \-\-wait ] SECONDS (600)
++Sets the maximum wait time to
++initialize the daemon. If the
++daemon fails to initialize,
++prints an error and returns 1
++.TP
++\-c [ \-\-check ]
++Prints the daemon's process ID
++to stdout and returns 0 if the
++daemon is running, otherwise
++returns 1
++.TP
++\-q [ \-\-quit ]
++Tells the daemon to shut down
++
++.SH FILES
++.I /etc/qpidd.conf
++.RS
++Default configuration file.
++.RE
++
++Configuration file settings are over-ridden by command line or environment variable settings. '--config <file>' or 'export QPID_CONFIG=<file>' specifies an alternate file.
++
++Each line is a name=value pair. Blank lines and lines beginning with # are ignored. For example:
++
++  # My qpidd configuration file.
++  port=6000
++  max-connections=10
++  log-to-file=/tmp/qpidd.log
++
++.SH ENVIRONMENT
++.I QPID_<option>
++.RS
++There is an environment variable for each option.
++.RE
++
++The environment variable is the option name in uppercase, prefixed with QPID_ and '.' or '-' are replaced with '_'. Environment settings are over-ridden by command line settings. For example:
++
++  export QPID_PORT=6000
++  export QPID_MAX_CONNECTIONS=10
++  export QPID_LOG_TO_FILE=/tmp/qpidd.log
++
++.SH AUTHOR
++
++The Apache Qpid Project, dev@qpid.apache.org
++
++.SH REPORTING BUGS
++
++Please report bugs to users@qpid.apache.org
+diff --git a/qpid/cpp/docs/man/qpidd.x b/qpid/cpp/docs/man/qpidd.x
+index af5d962..0ccf3b5 100644
+--- a/qpid/cpp/docs/man/qpidd.x
++++ b/qpid/cpp/docs/man/qpidd.x
+@@ -13,6 +13,8 @@ messages using the Advanced Message Queueing Protocol (AMQP).
+ 
+ [OPTIONS]
+ 
++The options below are built-in to qpidd. Installing add-on modules provides additional options. To see the full set of options available type "qpidd --help"
++
+ Options may be specified via command line, environment variable or configuration file. See FILES and ENVIRONMENT below for details.
+ 
+ [FILES]
+diff --git a/qpid/cpp/include/qpid/types/Variant.h b/qpid/cpp/include/qpid/types/Variant.h
+index d926013..876e1a2 100644
+--- a/qpid/cpp/include/qpid/types/Variant.h
++++ b/qpid/cpp/include/qpid/types/Variant.h
+@@ -120,6 +120,10 @@ class Variant
+      * value. Recognises integers, doubles and booleans.
+      */
+     QPID_TYPES_EXTERN Variant& parse(const std::string&);
++    /**
++     * fromString() is deprecated - use parse() instead.
++     */
++    QPID_TYPES_EXTERN Variant& fromString(const std::string& s);
+ 
+     QPID_TYPES_EXTERN bool asBool() const;
+     QPID_TYPES_EXTERN uint8_t asUint8() const;
+diff --git a/qpid/cpp/managementgen/qmfgen/schema.py b/qpid/cpp/managementgen/qmfgen/schema.py
+index afdfe42..59e951f 100755
+--- a/qpid/cpp/managementgen/qmfgen/schema.py
++++ b/qpid/cpp/managementgen/qmfgen/schema.py
+@@ -1731,9 +1731,9 @@ class SchemaPackage:
+                   stream.write("            qmf::SchemaProperty arg(\"%s\", %s);\n" % (arg.name, typeName))
+                   if subType:
+                       stream.write("            arg.setSubtype(\"%s\");\n" % subType)
+-                  if stat.unit:
++                  if arg.unit:
+                       stream.write("            arg.setUnit(\"%s\");\n" % arg.unit)
+-                  if stat.desc:
++                  if arg.desc:
+                       stream.write("            arg.setDesc(\"%s\");\n" % arg.desc)
+                   stream.write("            arg.setDirection(%s);\n" % self.qmfv2Dir(arg.dir))
+                   stream.write("            method.addArgument(arg);\n")
+diff --git a/qpid/cpp/rubygen/amqpgen.rb b/qpid/cpp/rubygen/amqpgen.rb
+index 69e65a4..20aac35 100755
+--- a/qpid/cpp/rubygen/amqpgen.rb
++++ b/qpid/cpp/rubygen/amqpgen.rb
+@@ -61,7 +61,8 @@ end
+ class Module
+   # Add trailing _ to avoid conflict with Object methods.
+   def mangle(sym)
+-    (Object.method_defined? sym) ? (sym.to_s+"_").intern : sym
++    sym =  (sym.to_s+"_").to_sym if (Object.method_defined?(sym) or sym == :type)
++    sym
+   end
+ 
+   # Add attribute reader for XML attribute.
+diff --git a/qpid/cpp/src/Makefile.am b/qpid/cpp/src/Makefile.am
+index dfb2547..01b7640 100644
+--- a/qpid/cpp/src/Makefile.am
++++ b/qpid/cpp/src/Makefile.am
+@@ -332,6 +332,7 @@ libqpidcommon_la_SOURCES +=			\
+   qpid/Address.cpp				\
+   qpid/DataDir.cpp				\
+   qpid/DataDir.h				\
++  qpid/DisableExceptionLogging.h		\
+   qpid/Exception.cpp				\
+   qpid/Modules.cpp				\
+   qpid/Modules.h				\
+@@ -884,10 +885,6 @@ nobase_include_HEADERS +=			\
+   ../include/qpid/types/Variant.h		\
+   ../include/qpid/types/ImportExport.h
+ 
+-# Force build of qpidd during dist phase so help2man will work.
+-dist-hook: $(BUILT_SOURCES)
+-	$(MAKE) qpidd
+-
+ # Create the default data directory
+ install-data-local:
+ 	$(mkinstalldirs) $(DESTDIR)/$(localstatedir)/lib/qpidd
+diff --git a/qpid/cpp/src/qpid/DisableExceptionLogging.h b/qpid/cpp/src/qpid/DisableExceptionLogging.h
+new file mode 100644
+index 0000000..04a9240
+--- /dev/null
++++ b/qpid/cpp/src/qpid/DisableExceptionLogging.h
+@@ -0,0 +1,39 @@
++#ifndef QPID_DISABLEEXCEPTIONLOGGING_H
++#define QPID_DISABLEEXCEPTIONLOGGING_H
++
++/*
++ *
++ * Licensed to the Apache Software Foundation (ASF) under one
++ * or more contributor license agreements.  See the NOTICE file
++ * distributed with this work for additional information
++ * regarding copyright ownership.  The ASF licenses this file
++ * to you under the Apache License, Version 2.0 (the
++ * "License"); you may not use this file except in compliance
++ * with the License.  You may obtain a copy of the License at
++ *
++ *   http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing,
++ * software distributed under the License is distributed on an
++ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
++ * KIND, either express or implied.  See the License for the
++ * specific language governing permissions and limitations
++ * under the License.
++ *
++ */
++#include "qpid/CommonImportExport.h"
++
++namespace qpid {
++
++/**
++ * Temporarily disable logging in qpid::Exception constructor.
++ * Used by log::Logger to avoid logging exceptions during Logger construction.
++ */
++struct DisableExceptionLogging
++{
++    QPID_COMMON_EXTERN DisableExceptionLogging();
++    QPID_COMMON_EXTERN ~DisableExceptionLogging();
++};
++} // namespace qpid
++
++#endif  /*!QPID_DISABLEEXCEPTIONLOGGING_H*/
+diff --git a/qpid/cpp/src/qpid/Exception.cpp b/qpid/cpp/src/qpid/Exception.cpp
+index 16a3a13..a6696f0 100644
+--- a/qpid/cpp/src/qpid/Exception.cpp
++++ b/qpid/cpp/src/qpid/Exception.cpp
+@@ -7,9 +7,9 @@
+  * to you under the Apache License, Version 2.0 (the
+  * "License"); you may not use this file except in compliance
+  * with the License.  You may obtain a copy of the License at
+- * 
++ *
+  *   http://www.apache.org/licenses/LICENSE-2.0
+- * 
++ *
+  * Unless required by applicable law or agreed to in writing,
+  * software distributed under the License is distributed on an
+  * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+@@ -21,13 +21,25 @@
+ 
+ #include "qpid/log/Statement.h"
+ #include "qpid/Exception.h"
++#include "qpid/DisableExceptionLogging.h"
+ #include <typeinfo>
+ #include <assert.h>
+ #include <string.h>
+ 
+ namespace qpid {
+ 
++// Note on static initialization order: if an exception is constructed
++// in a static constructor before disableExceptionLogging has been
++// initialized, the worst that can happen is we lose an exception log
++// message. Since we shouldn't be throwing a lot of exceptions during
++// static construction this seems safe.
++static bool disableExceptionLogging = false;
++
++DisableExceptionLogging::DisableExceptionLogging() { disableExceptionLogging = true; }
++DisableExceptionLogging::~DisableExceptionLogging() { disableExceptionLogging = false; }
++
+ Exception::Exception(const std::string& msg) throw() : message(msg) {
++    if (disableExceptionLogging) return;
+     QPID_LOG_IF(debug, !msg.empty(), "Exception constructed: " << message);
+ }
+ 
+diff --git a/qpid/cpp/src/qpid/log/Logger.cpp b/qpid/cpp/src/qpid/log/Logger.cpp
+index 2217cdd..2339a62 100644
+--- a/qpid/cpp/src/qpid/log/Logger.cpp
++++ b/qpid/cpp/src/qpid/log/Logger.cpp
+@@ -22,6 +22,7 @@
+ #include "qpid/memory.h"
+ #include "qpid/sys/Thread.h"
+ #include "qpid/sys/Time.h"
++#include "qpid/DisableExceptionLogging.h"
+ #include <boost/pool/detail/singleton.hpp>
+ #include <boost/bind.hpp>
+ #include <boost/function.hpp>
+@@ -48,11 +49,16 @@ Logger& Logger::instance() {
+ }
+ 
+ Logger::Logger() : flags(0) {
++    // Disable automatic logging in Exception constructors to avoid
++    // re-entrant use of logger singleton if there is an error in
++    // option parsing.
++    DisableExceptionLogging del;
++
+     // Initialize myself from env variables so all programs
+     // (e.g. tests) can use logging even if they don't parse
+     // command line args.
+     Options opts("");
+-    opts.parse(0, 0);           
++    opts.parse(0, 0);
+     configure(opts);
+ }
+ 
+@@ -73,7 +79,7 @@ void Logger::log(const Statement& s, const std::string& msg) {
+     std::ostringstream os;
+     if (!prefix.empty())
+         os << prefix << ": ";
+-    if (flags&TIME) 
++    if (flags&TIME)
+ 		qpid::sys::outputFormattedNow(os);
+     if (flags&LEVEL)
+         os << LevelTraits::name(s.level) << " ";
+@@ -140,7 +146,7 @@ void Logger::configure(const Options& opts) {
+     Options o(opts);
+     if (o.trace)
+         o.selectors.push_back("trace+");
+-    format(o); 
++    format(o);
+     select(Selector(o));
+     setPrefix(opts.prefix);
+     options.sinkOptions->setup(this);
+diff --git a/qpid/cpp/src/qpid/types/Variant.cpp b/qpid/cpp/src/qpid/types/Variant.cpp
+index 9cc3cfe..30d7ff1 100644
+--- a/qpid/cpp/src/qpid/types/Variant.cpp
++++ b/qpid/cpp/src/qpid/types/Variant.cpp
+@@ -781,6 +781,10 @@ Variant& Variant::parse(const std::string& s)
+     return *this;
+ }
+ 
++Variant& Variant::fromString(const std::string& s)
++{
++    return parse(s);
++}
+ 
+ VariantType Variant::getType() const { return impl ? impl->getType() : VAR_VOID; }
+ bool Variant::isVoid() const { return getType() == VAR_VOID; }
+diff --git a/qpid/python/qpid/messaging/driver.py b/qpid/python/qpid/messaging/driver.py
+index 2eb2c18..78af282 100644
+--- a/qpid/python/qpid/messaging/driver.py
++++ b/qpid/python/qpid/messaging/driver.py
+@@ -66,7 +66,7 @@ class Attachment:
+ 
+ # XXX
+ 
+-DURABLE_DEFAULT=True
++DURABLE_DEFAULT=False
+ 
+ # XXX
+ 
+@@ -526,7 +526,7 @@ class Driver:
+       rawlog.debug("OPEN[%s]: %s:%s", self.log_id, host, port)
+       trans = transports.TRANSPORTS.get(self.connection.transport)
+       if trans:
+-        self._transport = trans(host, port)
++        self._transport = trans(self.connection, host, port)
+       else:
+         raise ConnectError("no such transport: %s" % self.connection.transport)
+       if self._retrying and self._reconnect_log:
+@@ -930,6 +930,7 @@ class Engine:
+ 
+   def resolve_declare(self, sst, lnk, dir, action):
+     declare = lnk.options.get("create") in ("always", dir)
++    assrt = lnk.options.get("assert") in ("always", dir)
+     def do_resolved(type, subtype):
+       err = None
+       if type is None:
+@@ -938,7 +939,12 @@ class Engine:
+         else:
+           err = NotFound(text="no such queue: %s" % lnk.name)
+       else:
+-        action(type, subtype)
++        if assrt:
++          expected = lnk.options.get("node", {}).get("type")
++          if expected and type != expected:
++            err = AssertionFailed(text="expected %s, got %s" % (expected, type))
++        if err is None:
++          action(type, subtype)
+ 
+       if err:
+         tgt = lnk.target
+diff --git a/qpid/python/qpid/messaging/endpoints.py b/qpid/python/qpid/messaging/endpoints.py
+index 30c5850..cfc89d4 100644
+--- a/qpid/python/qpid/messaging/endpoints.py
++++ b/qpid/python/qpid/messaging/endpoints.py
+@@ -158,6 +158,7 @@ class Connection(Endpoint):
+     self.reconnect_log = options.get("reconnect_log", True)
+ 
+     self.address_ttl = options.get("address_ttl", 60)
++    self.tcp_nodelay = options.get("tcp_nodelay", False)
+ 
+     self.options = options
+ 
+diff --git a/qpid/python/qpid/messaging/transports.py b/qpid/python/qpid/messaging/transports.py
+index 8133a45..7abaae1 100644
+--- a/qpid/python/qpid/messaging/transports.py
++++ b/qpid/python/qpid/messaging/transports.py
+@@ -17,18 +17,23 @@
+ # under the License.
+ #
+ 
++import socket
+ from qpid.util import connect
+ 
+ TRANSPORTS = {}
+ 
+-class tcp:
++class SocketTransport:
+ 
+-  def __init__(self, host, port):
++  def __init__(self, conn, host, port):
+     self.socket = connect(host, port)
++    if conn.tcp_nodelay:
++      self.socket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
+ 
+   def fileno(self):
+     return self.socket.fileno()
+ 
++class tcp(SocketTransport):
++
+   def reading(self, reading):
+     return reading
+ 
+@@ -52,17 +57,14 @@ try:
+ except ImportError:
+   pass
+ else:
+-  class tls:
++  class tls(SocketTransport):
+ 
+-    def __init__(self, host, port):
+-      self.socket = connect(host, port)
++    def __init__(self, conn, host, port):
++      SocketTransport.__init__(self, conn, host, port)
+       self.tls = wrap_socket(self.socket)
+       self.socket.setblocking(0)
+       self.state = None
+ 
+-    def fileno(self):
+-      return self.socket.fileno()
+-
+     def reading(self, reading):
+       if self.state is None:
+         return reading
+diff --git a/qpid/python/qpid/tests/messaging/endpoints.py b/qpid/python/qpid/tests/messaging/endpoints.py
+index 0977b2a..db5ec03 100644
+--- a/qpid/python/qpid/tests/messaging/endpoints.py
++++ b/qpid/python/qpid/tests/messaging/endpoints.py
+@@ -46,6 +46,10 @@ class SetupTests(Base):
+     self.conn.open()
+     self.ping(self.conn.session())
+ 
++  def testTcpNodelay(self):
++    self.conn = Connection.establish(self.broker, tcp_nodelay=True)
++    assert self.conn._driver._transport.socket.getsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY)
++
+   def testConnectError(self):
+     try:
+       # Specifying port 0 yields a bad address on Windows; port 4 is unassigned
+@@ -111,8 +115,8 @@ class SetupTests(Base):
+ 
+     class flaky:
+ 
+-      def __init__(self, host, port):
+-        self.real = real(host, port)
++      def __init__(self, conn, host, port):
++        self.real = real(conn, host, port)
+         self.sent_count = 0
+         self.recv_count = 0
+ 
+@@ -251,8 +255,8 @@ class ConnectionTests(Base):
+ 
+ class hangable:
+ 
+-  def __init__(self, host, port):
+-    self.tcp = TRANSPORTS["tcp"](host, port)
++  def __init__(self, conn, host, port):
++    self.tcp = TRANSPORTS["tcp"](conn, host, port)
+     self.hung = False
+ 
+   def hang(self):
+@@ -1182,6 +1186,16 @@ test-link-bindings-queue; {
+       snd.send(m)
+     self.drain(qrcv, expected=msgs)
+ 
++  def testAssert1(self):
++    try:
++      snd = self.ssn.sender("amq.topic; {assert: always, node: {type: queue}}")
++      assert 0, "assertion failed to trigger"
++    except AssertionFailed, e:
++      pass
++
++  def testAssert2(self):
++    snd = self.ssn.sender("amq.topic; {assert: always}")
++
+ NOSUCH_Q = "this-queue-should-not-exist"
+ UNPARSEABLE_ADDR = "name/subject; {bad options"
+ UNLEXABLE_ADDR = "\0x0\0x1\0x2\0x3"
